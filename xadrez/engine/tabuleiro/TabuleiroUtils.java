@@ -15,8 +15,8 @@ public class TabuleiroUtils {
     public static final boolean[] SEGUNDA_LINHA = iniciarLinha(6);
     
     
-    public static final int NUM_QUADRADOS = 25;
-    public static final int NUM_QUADRADOS_POR_LINHA = 5;
+    public static final int NUM_QUADRADOS = 64;
+    public static final int NUM_QUADRADOS_POR_LINHA = 8;
     
     private static final boolean[] iniciarColunas(final int coluna) {
         final boolean[] colunas = new boolean[NUM_QUADRADOS];

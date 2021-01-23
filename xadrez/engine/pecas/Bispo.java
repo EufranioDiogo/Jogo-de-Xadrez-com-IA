@@ -18,7 +18,7 @@ import java.util.List;
 public class Bispo extends Peca {
     private static final int[] possiveisOffsetsDoBispo = {-7, -9, 7, 9};
     
-    public Bispo(int posicaoPeca, Alliance alliancePeca) {
+    public Bispo(int[] posicaoPeca, Alliance alliancePeca) {
         super(posicaoPeca, alliancePeca, TipoPeca.BISPO);
     }
 

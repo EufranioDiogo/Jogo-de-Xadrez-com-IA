@@ -10,8 +10,6 @@ import java.util.List;
  */
 public abstract class Peca {
     protected final TipoPeca tipoPeca;
-    protected final int coluna;
-    protected final int linha;
     protected final int posicaoPeca;
     protected final Alliance alliancePeca;
     protected final boolean isPrimeiroMovimento;

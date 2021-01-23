@@ -73,7 +73,7 @@ public class Tabuleiro {
         return this;
     }
     
-    public Quadrado getQuadrado(final int coordenada) {
+    public Quadrado getQuadrado(final int[] coordenada) {
         return tabuleiroJogo.get(coordenada);
     }
 
