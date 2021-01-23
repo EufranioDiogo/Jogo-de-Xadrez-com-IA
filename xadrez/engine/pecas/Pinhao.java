@@ -1,0 +1,74 @@
+package chessgameai.xadrez.engine.pecas;
+
+import chessgameai.Alliance;
+import static chessgameai.Alliance.BLACK;
+import static chessgameai.Alliance.WHITE;
+import chessgameai.xadrez.engine.tabuleiro.Movimento;
+import chessgameai.xadrez.engine.tabuleiro.Tabuleiro;
+import chessgameai.xadrez.engine.tabuleiro.TabuleiroUtils;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ *
+ * @Autor ed
+ * Free Use - Livre_Uso
+ */
+public class Pinhao extends Peca {
+    private static final int[] possiveisOffsetsDoPinhao = {8, 16, 7, 9};
+    
+    public Pinhao(final int posicaoPeca, final Alliance alliancePeca) {
+        super(posicaoPeca, alliancePeca, TipoPeca.PINHAO);
+    }
+
+    @Override
+    public List<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
+        ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
+        
+        
+        for (final int possivelOffset : possiveisOffsetsDoPinhao) {
+            int coordenadaCandidata = this.getPosicaoPeca() + (possivelOffset * this.getAlliancePeca().getDirection());
+            
+            if (!TabuleiroUtils.isCoordenadaValida(coordenadaCandidata)) {
+                continue;
+            }
+            
+            if (possivelOffset == 8 && !tabuleiro.getQuadrado(coordenadaCandidata).isQuadradoOcupado()) {
+                movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, coordenadaCandidata));
+            } else if (possivelOffset == 16 && this.isPrimeiroMovimento() && 
+                    (TabuleiroUtils.OITAVA_LINHA[coordenadaCandidata] && this.getAlliancePeca() == BLACK) ||
+                    (TabuleiroUtils.SEGUNDA_LINHA[coordenadaCandidata] && this.getAlliancePeca() == WHITE) &&
+                    (!tabuleiro.getQuadrado(coordenadaCandidata).isQuadradoOcupado())) {
+                
+                    movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, coordenadaCandidata));
+            } else if (possivelOffset == 7 &&
+                    !((TabuleiroUtils.OITAVA_COLUNA[this.posicaoPeca] && this.alliancePeca == WHITE ||
+                    (TabuleiroUtils.PRIMEIRA_COLUNA[this.posicaoPeca] && this.alliancePeca == BLACK)))) {
+                    
+                if (tabuleiro.getQuadrado(coordenadaCandidata).isQuadradoOcupado() && 
+                    this.alliancePeca != tabuleiro.getQuadrado(coordenadaCandidata).getPeca().getAlliancePeca()) {
+                    movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidata));
+                }
+            } else if (possivelOffset == 9 &&
+                    !((TabuleiroUtils.PRIMEIRA_COLUNA[this.posicaoPeca] && this.alliancePeca == WHITE ||
+                    (TabuleiroUtils.OITAVA_COLUNA[this.posicaoPeca] && this.alliancePeca == BLACK)))) {
+                
+                if (tabuleiro.getQuadrado(coordenadaCandidata).isQuadradoOcupado() && 
+                    this.alliancePeca != tabuleiro.getQuadrado(coordenadaCandidata).getPeca().getAlliancePeca()) {
+                    movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidata));
+                }
+                
+            }
+        }
+        return Collections.unmodifiableList(movimentosPossiveis);
+    }
+    @Override
+    public String toString() {
+        return TipoPeca.PINHAO.toString();
+    }
+    @Override
+    public Pinhao movimentarPeca(Movimento move) {
+        return new Pinhao(move.getCoordenadaDestino(), move.getPecaMovimentada().getAlliancePeca());
+    }
+}
