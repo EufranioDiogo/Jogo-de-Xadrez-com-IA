@@ -154,9 +154,40 @@ public class Mesa {
             validate();
             repaint();
         }
-        
-        
     }
+    
+    public static class LogMovimento {
+        private final ArrayList<Movimento> movimentos;
+
+        public LogMovimento() {
+            this.movimentos = new ArrayList<>();
+        }
+        
+        public ArrayList<Movimento> getMovimentos() {
+            return this.movimentos;
+        }
+        
+        public void adicionarMovimento(Movimento movimento) {
+            this.movimentos.add(movimento);
+        }
+        
+        public int size() {
+            return this.movimentos.size();
+        }
+        
+        public void clear() {
+            this.movimentos.clear();
+        }
+        
+        public Movimento removerMovimento(int index) {
+            return this.movimentos.remove(index);
+        }
+        
+        public boolean removerMovimento(final Movimento movimento) {
+            return this.movimentos.remove(movimento);
+        }
+    }
+    
     
     private class PainelQuadrado extends JPanel {
         private final int idQuadrado;
@@ -184,7 +215,6 @@ public class Mesa {
                         if (elementoPressionado instanceof PainelQuadrado) {
                             
                             if (origemQuadrado  == null) {
-                                System.out.println("Chave origem: " + idQuadrado);
                                 origemQuadrado = tabuleiro.getQuadrado(idQuadrado);
                                 pecaMovidaPeloHumano = origemQuadrado.getPeca();
 
@@ -192,43 +222,40 @@ public class Mesa {
                                     origemQuadrado = null;
                                 }
                             } else {
-                                
-                                System.out.println("Chave: " + idQuadrado);
 
-                                final Movimento movimento = Movimento.MovimentoFactory.criarMovimento(tabuleiro,
-                                      origemQuadrado.getPeca().getPosicaoPeca(), idQuadrado);
+                                if (origemQuadrado.getPeca().getPosicaoPeca() == idQuadrado) {
+                                    origemQuadrado = null;
+                                    destinoQuadrado = null;
+                                    pecaMovidaPeloHumano = null;
+                                } else {
+                                    final Movimento movimento = Movimento.MovimentoFactory.criarMovimento(tabuleiro,
+                                    origemQuadrado.getPeca().getPosicaoPeca(), idQuadrado);
 
-                                System.out.println("Movimentacao2");
+                                    final MoveTransition movimentacao = tabuleiro.getJogadorActual().fazerMovimento(movimento);
 
-                                final MoveTransition movimentacao = tabuleiro.getJogadorActual().fazerMovimento(movimento);
-
-                                System.out.println("Movimentacao");
-
-                                if (movimentacao.getEstadoMovimento().isDone()) {
-                                    tabuleiro = movimentacao.getTabuleiro();
-                                }
-                                System.out.println("Lol");
-                                
-
-                                SwingUtilities.invokeLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                        try {
-                                            painelTabuleiro.drawTabuleiro(tabuleiro);
-                                        } catch (IOException ex) {
-                                            Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
+                                    if (movimentacao.getEstadoMovimento().isDone()) {
+                                        tabuleiro = movimentacao.getTabuleiro();
+                                        
+                                        //Move Log
                                     }
-                                });
 
-                                destinoQuadrado = null;
-                                origemQuadrado = null;
-                                pecaMovidaPeloHumano = null;
+                                    SwingUtilities.invokeLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                            try {
+                                                painelTabuleiro.drawTabuleiro(tabuleiro);
+                                            } catch (IOException ex) {
+                                                Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                        }
+                                    });
+
+                                    destinoQuadrado = null;
+                                    origemQuadrado = null;
+                                    pecaMovidaPeloHumano = null;
+                                }
                             }
                         }
-                        
-                        
-                        
                     }
                     
                 }

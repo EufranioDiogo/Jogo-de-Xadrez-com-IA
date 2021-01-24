@@ -17,13 +17,17 @@ public class Cavalo extends Peca{
     private final int[] POSSIVEIS_MOVIMENTO_VALIDOS = {-17, -15, -10, -6, 6, 10, 15, 17};
 
     public Cavalo(final int posicaoPeca, final Alliance alliancePeca) {
-        super(posicaoPeca, alliancePeca, TipoPeca.CAVALO);
+        super(posicaoPeca, alliancePeca, TipoPeca.CAVALO, true);
+    }
+    
+    public Cavalo(final int posicaoPeca, final Alliance alliancePeca, final boolean primeiroMovimento) {
+        super(posicaoPeca, alliancePeca, TipoPeca.CAVALO, primeiroMovimento);
     }
 
     @Override
-    public List<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
+    public ArrayList<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
         int coordenadaCandidataADestino;
-        final List<Movimento> movimentosPossiveis = new ArrayList<>();
+        final ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
         
         for(final int coordenada : POSSIVEIS_MOVIMENTO_VALIDOS) {
             coordenadaCandidataADestino = this.posicaoPeca + coordenada;
@@ -48,7 +52,7 @@ public class Cavalo extends Peca{
                 }
             }
         }
-        return Collections.unmodifiableList(movimentosPossiveis);
+        return movimentosPossiveis;
     }
     
     private static boolean isExculasaoPrimeiraColuna(final int posicaoActual, final int possivelPosicao) {

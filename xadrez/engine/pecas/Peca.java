@@ -2,7 +2,9 @@ package chessgameai.xadrez.engine.pecas;
 import chessgameai.Alliance;
 import chessgameai.xadrez.engine.tabuleiro.Movimento;
 import chessgameai.xadrez.engine.tabuleiro.Tabuleiro;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 /**
  *
  * @Autor ed
@@ -12,14 +14,14 @@ public abstract class Peca {
     protected final TipoPeca tipoPeca;
     protected final int posicaoPeca;
     protected final Alliance alliancePeca;
-    protected final boolean isPrimeiroMovimento;
+    protected boolean isPrimeiroMovimento;
     private final int cachedHashCode;
     
-    Peca(final int posicaoPeca, final Alliance alliancePeca, final TipoPeca tipoPeca) {
+    Peca(final int posicaoPeca, final Alliance alliancePeca, final TipoPeca tipoPeca, final boolean primeiroMovimento) {
         this.posicaoPeca = posicaoPeca;
         this.alliancePeca = alliancePeca;
         this.tipoPeca = tipoPeca;
-        isPrimeiroMovimento = false;
+        this.isPrimeiroMovimento = primeiroMovimento;
         this.cachedHashCode = computeHashCode();
     }
     
@@ -53,7 +55,7 @@ public abstract class Peca {
         return this.cachedHashCode;
     }
     
-    public abstract List<Movimento> calcularPossiveisMovimentos(final Tabuleiro tabuleiro);
+    public abstract ArrayList<Movimento> calcularPossiveisMovimentos(final Tabuleiro tabuleiro);
 
     public int getPosicaoPeca() {
         return posicaoPeca;
@@ -65,6 +67,10 @@ public abstract class Peca {
     
     public boolean isPrimeiroMovimento() {
         return this.isPrimeiroMovimento;
+    }
+    
+    public void setPrimeiroMovimento(boolean valor) {
+        this.isPrimeiroMovimento = valor;
     }
     
     public TipoPeca getTipoPeca() {
@@ -79,15 +85,50 @@ public abstract class Peca {
         return this.tipoPeca == TipoPeca.TORRE;
     }
     
+    public int getValorPeca() {
+        return this.tipoPeca.getValor();
+    }
+    
+    
     public abstract Peca movimentarPeca(Movimento move);
     
     public enum TipoPeca {
-        PINHAO("P"),
-        BISPO("B"),
-        TORRE("T"),
-        CAVALO("C"),
-        REI("R"),
-        RAINHA("Q");
+        PINHAO("P") {
+            @Override
+            public int getValor() {
+                return 100;
+            }
+        },
+        BISPO("B") {
+            @Override
+            public int getValor() {
+                return 300;
+            }
+        },
+        TORRE("T") {
+            @Override
+            public int getValor() {
+                return 500;
+            }
+        },
+        CAVALO("C") {
+            @Override
+            public int getValor() {
+                return 300;
+            }
+        },
+        REI("R") {
+            @Override
+            public int getValor() {
+                return 10000;
+            }
+        },
+        RAINHA("Q") {
+            @Override
+            public int getValor() {
+                return 900;
+            }
+        };
         private String nomePeca;
         
         TipoPeca(final String nomePeca) {
@@ -98,6 +139,8 @@ public abstract class Peca {
         public String toString() {
             return this.nomePeca;
         }
+        
+        public abstract int getValor();
     }
     
     

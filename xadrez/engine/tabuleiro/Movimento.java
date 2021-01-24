@@ -16,12 +16,21 @@ public abstract class Movimento {
     final Tabuleiro tabuleiro;
     final Peca pecaASerMovimentada;
     final int coordenadaDestino;
+    final boolean isPrimeiroMovimento;
     public static final Movimento NULL_MOVIMENTO = new NullMove();
     
     private Movimento(final Tabuleiro tabuleiro, final Peca pecaASerMovimentada, final int coordenadaDestino) {
         this.tabuleiro = tabuleiro;
         this.pecaASerMovimentada = pecaASerMovimentada;
         this.coordenadaDestino = coordenadaDestino;
+        this.isPrimeiroMovimento = pecaASerMovimentada.isPrimeiroMovimento();
+    }
+    
+    private Movimento(final Tabuleiro tabuleiro, final int coordenadaDestino) {
+        this.tabuleiro = tabuleiro;
+        this.pecaASerMovimentada = null;
+        this.coordenadaDestino = coordenadaDestino;
+        this.isPrimeiroMovimento = false;
     }
     
     @Override
@@ -31,7 +40,7 @@ public abstract class Movimento {
         
         result = prime * result + this.coordenadaDestino;
         result = prime * result + this.pecaASerMovimentada.hashCode();
-    
+        result = prime * result + this.pecaASerMovimentada.getPosicaoPeca();
         return result;
     }
     
@@ -45,7 +54,8 @@ public abstract class Movimento {
         }
         final Movimento outroMovimento = (Movimento) outro;
         
-        return getCoordenadaDestino() == outroMovimento.getCoordenadaDestino() &&
+        return this.getPosicaoActual() == outroMovimento.getPosicaoActual() &&
+               getCoordenadaDestino() == outroMovimento.getCoordenadaDestino() &&
                getPecaMovimentada().equals(outroMovimento.getPecaMovimentada());
     }
     
@@ -86,16 +96,12 @@ public abstract class Movimento {
        for (final Peca peca : this.tabuleiro.getJogadorActual().getOponente().getPecasActivas()) {
            constructor.setPeca(peca);
        }
-        System.out.println("Saiu - Movimento");
        
-
        constructor.setPeca(this.getPecaMovimentada().movimentarPeca(this));
-       
        constructor.setProximoJogadorAJogar(this.tabuleiro.getJogadorActual().getOponente().getJogadorAlliance());
        
        Tabuleiro tab = constructor.build();
        
-        System.out.println("Lolsjbsj");
        return tab;
     }
     
@@ -143,6 +149,16 @@ public abstract class Movimento {
         
         public MovimentoSemAtaque(final Tabuleiro tabuleiro, final Peca pecaASerMovimentada, final int coordenadaDestino) {
             super(tabuleiro, pecaASerMovimentada, coordenadaDestino);
+        }
+        
+        @Override
+        public boolean equals(final Object outro) {
+            return this == outro || outro instanceof MovimentoSemAtaque && super.equals(outro);
+        }
+        
+        @Override
+        public String toString() {
+            return this.pecaASerMovimentada.getTipoPeca().toString() + TabuleiroUtils.getPosicaoParaCoordenada(coordenadaDestino);
         }
     }
     
@@ -268,7 +284,7 @@ public abstract class Movimento {
     
     public static class NullMove extends Movimento {
         public NullMove() {
-            super(null, null, -1);
+            super(null, -1);
         }
         
         @Override

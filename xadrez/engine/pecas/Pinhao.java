@@ -19,11 +19,15 @@ public class Pinhao extends Peca {
     private static final int[] possiveisOffsetsDoPinhao = {8, 16, 7, 9};
     
     public Pinhao(final int posicaoPeca, final Alliance alliancePeca) {
-        super(posicaoPeca, alliancePeca, TipoPeca.PINHAO);
+        super(posicaoPeca, alliancePeca, TipoPeca.PINHAO, true);
+    }
+    
+    public Pinhao(final int posicaoPeca, final Alliance alliancePeca, final boolean primeiroMovimento) {
+        super(posicaoPeca, alliancePeca, TipoPeca.PINHAO, primeiroMovimento);
     }
 
     @Override
-    public List<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
+    public ArrayList<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
         ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
         
         
@@ -36,19 +40,19 @@ public class Pinhao extends Peca {
             
             if (possivelOffset == 8 && !tabuleiro.getQuadrado(coordenadaCandidata).isQuadradoOcupado()) {
                 movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, coordenadaCandidata));
-            } else if (possivelOffset == 16 && this.isPrimeiroMovimento() && 
-                    (TabuleiroUtils.OITAVA_LINHA[coordenadaCandidata] && this.getAlliancePeca() == BLACK) ||
-                    (TabuleiroUtils.SEGUNDA_LINHA[coordenadaCandidata] && this.getAlliancePeca() == WHITE) &&
-                    (!tabuleiro.getQuadrado(coordenadaCandidata).isQuadradoOcupado())) {
+            } else if (possivelOffset == 16 && this.isPrimeiroMovimento() &&
+                    ((TabuleiroUtils.QUARTA_LINHA[coordenadaCandidata] && this.getAlliancePeca() == WHITE) || 
+                    (TabuleiroUtils.QUINTA_LINHA[coordenadaCandidata] && this.getAlliancePeca() == BLACK)) &&
+                    !tabuleiro.getQuadrado(coordenadaCandidata).isQuadradoOcupado()) {
                 
-                    movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, coordenadaCandidata));
+                    movimentosPossiveis.add(new Movimento.PinhaoSalto(tabuleiro, this, coordenadaCandidata));
             } else if (possivelOffset == 7 &&
                     !((TabuleiroUtils.OITAVA_COLUNA[this.posicaoPeca] && this.alliancePeca == WHITE ||
                     (TabuleiroUtils.PRIMEIRA_COLUNA[this.posicaoPeca] && this.alliancePeca == BLACK)))) {
                     
                 if (tabuleiro.getQuadrado(coordenadaCandidata).isQuadradoOcupado() && 
                     this.alliancePeca != tabuleiro.getQuadrado(coordenadaCandidata).getPeca().getAlliancePeca()) {
-                    movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidata));
+                    movimentosPossiveis.add(new Movimento.PinhaoMovimentoAtaque(tabuleiro, this, coordenadaCandidata));
                 }
             } else if (possivelOffset == 9 &&
                     !((TabuleiroUtils.PRIMEIRA_COLUNA[this.posicaoPeca] && this.alliancePeca == WHITE ||
@@ -56,12 +60,13 @@ public class Pinhao extends Peca {
                 
                 if (tabuleiro.getQuadrado(coordenadaCandidata).isQuadradoOcupado() && 
                     this.alliancePeca != tabuleiro.getQuadrado(coordenadaCandidata).getPeca().getAlliancePeca()) {
-                    movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidata));
+                    movimentosPossiveis.add(new Movimento.PinhaoMovimento(tabuleiro, this, coordenadaCandidata));
                 }
                 
             }
         }
-        return Collections.unmodifiableList(movimentosPossiveis);
+        
+        return movimentosPossiveis;
     }
     @Override
     public String toString() {

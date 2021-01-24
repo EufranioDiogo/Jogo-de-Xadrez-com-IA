@@ -18,11 +18,15 @@ public class Rei extends Peca {
     private static final int[] possiveisOffsetsDoRei = {-9, -8, -7, -1, 1, 7, 8, 0};
 
     public Rei(final int posicaoPeca, final Alliance alliancePeca) {
-        super(posicaoPeca, alliancePeca, TipoPeca.REI);
+        super(posicaoPeca, alliancePeca, TipoPeca.REI, true);
     }
-
+    
+    public Rei(final int posicaoPeca, final Alliance alliancePeca, final boolean primeiroMovimento) {
+        super(posicaoPeca, alliancePeca, TipoPeca.REI, primeiroMovimento);
+    }
+    
     @Override
-    public List<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
+    public ArrayList<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
         ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
         
         for(final int possivelOffset : possiveisOffsetsDoRei) {
@@ -44,7 +48,7 @@ public class Rei extends Peca {
             }
         }
         
-        return Collections.unmodifiableList(movimentosPossiveis);
+        return movimentosPossiveis;
     }
 
     private static boolean isExculasaoPrimeiraColuna(final int posicaoActual, final int possivelPosicao) {

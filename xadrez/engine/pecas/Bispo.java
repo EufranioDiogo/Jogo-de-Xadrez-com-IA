@@ -18,129 +18,44 @@ import java.util.List;
 public class Bispo extends Peca {
     private static final int[] possiveisOffsetsDoBispo = {-7, -9, 7, 9};
     
-    public Bispo(int[] posicaoPeca, Alliance alliancePeca) {
-        super(posicaoPeca, alliancePeca, TipoPeca.BISPO);
+    public Bispo(int posicaoPeca, Alliance alliancePeca) {
+        super(posicaoPeca, alliancePeca, TipoPeca.BISPO, true);
+    }
+    
+    public Bispo(int posicaoPeca, Alliance alliancePeca, final boolean primeiroMovimento) {
+        super(posicaoPeca, alliancePeca, TipoPeca.BISPO, primeiroMovimento);
     }
 
     @Override
-    public List<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
+    public ArrayList<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
         ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
         
-        for (final int possivelOffset : possiveisOffsetsDoBispo) {
-            int coordenadaCandidataADestino = this.getPosicaoPeca();
+       for (final int currentCandidateOffset : possiveisOffsetsDoBispo) {
+            int candidateDestinationCoordinate = this.posicaoPeca;
             
-            if (verificarPrimeiraColuna(this.getPosicaoPeca()) ||
-                verificarOitavaColuna(this.getPosicaoPeca())) {
-                int coordenadaCandidataAuxiliar = coordenadaCandidataADestino;
-                int contadorLinhaActual = 7;
-                Quadrado quadrado;
-                coordenadaCandidataAuxiliar += possivelOffset;
-                quadrado = tabuleiro.getQuadrado(coordenadaCandidataAuxiliar);
-                    
-                if (this.getPosicaoPeca() == 63 && possivelOffset == -9) {
-                    
-                    while (contadorLinhaActual > 0) {
-                        if (!quadrado.isQuadradoOcupado()) {
-                            movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, coordenadaCandidataAuxiliar));
-                        } else {
-                            if (this.alliancePeca != quadrado.getPeca().getAlliancePeca()) {
-                                movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidataADestino));
-                            }
-                            break;
-                        }
-                        coordenadaCandidataAuxiliar += possivelOffset;
-                        quadrado = tabuleiro.getQuadrado(coordenadaCandidataAuxiliar);
-                        contadorLinhaActual--;
-                    }
-                    
-                } else if (this.getPosicaoPeca() == 56 && possivelOffset == -7) {
-                    while (contadorLinhaActual > 0) {
-                        if (!quadrado.isQuadradoOcupado()) {
-                            movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, coordenadaCandidataAuxiliar));
-                        } else {
-                            if (this.alliancePeca != quadrado.getPeca().getAlliancePeca()) {
-                                movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidataADestino));
-                            }
-                            break;
-                        }
-                        coordenadaCandidataAuxiliar += possivelOffset;
-                        quadrado = tabuleiro.getQuadrado(coordenadaCandidataAuxiliar);
-                        contadorLinhaActual--;
-                    }
-                } else if (this.getPosicaoPeca() == 0 && possivelOffset == 9) {
-
-                    while (contadorLinhaActual > 0) {
-                        if (!quadrado.isQuadradoOcupado()) {
-                            movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, coordenadaCandidataAuxiliar));
-                        } else {
-                            if (this.alliancePeca != quadrado.getPeca().getAlliancePeca()) {
-                                movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidataADestino));
-                            }
-                            break;
-                        }
-                        coordenadaCandidataAuxiliar += possivelOffset;
-                        quadrado = tabuleiro.getQuadrado(coordenadaCandidataAuxiliar);
-                        contadorLinhaActual--;
-                    }
-                } else if (this.getPosicaoPeca() == 7 && possivelOffset == 7) {
-                    while (contadorLinhaActual > 0) {
-                        if (!quadrado.isQuadradoOcupado()) {
-                            movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, coordenadaCandidataAuxiliar));
-                        } else {
-                            if (this.alliancePeca != quadrado.getPeca().getAlliancePeca()) {
-                                movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidataADestino));
-                            }
-                            break;
-                        }
-                        coordenadaCandidataAuxiliar += possivelOffset;
-                        quadrado = tabuleiro.getQuadrado(coordenadaCandidataAuxiliar);
-                        contadorLinhaActual--;
-                    }
+            while (TabuleiroUtils.isCoordenadaValida(candidateDestinationCoordinate)) {
+                if (isFirstColumnExclusion(currentCandidateOffset, candidateDestinationCoordinate) ||
+                    isEighthColumnExclusion(currentCandidateOffset, candidateDestinationCoordinate)) {
+                    break;
                 }
-            } else {
-                while (TabuleiroUtils.isCoordenadaValida(coordenadaCandidataADestino)) {
-                    if (verificarPrimeiraColuna(coordenadaCandidataADestino) ||
-                        verificarOitavaColuna(coordenadaCandidataADestino)) {
-
-                        Quadrado quadradoCandidato = tabuleiro.getQuadrado(coordenadaCandidataADestino);
-
-                        if (!quadradoCandidato.isQuadradoOcupado()) {
-                            movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this,coordenadaCandidataADestino));
-                        } else {
-                            if (this.alliancePeca != quadradoCandidato.getPeca().getAlliancePeca()) {
-                                movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidataADestino));
-                            }
-                            break;
+                candidateDestinationCoordinate += currentCandidateOffset;
+                if (TabuleiroUtils.isCoordenadaValida(candidateDestinationCoordinate)) {
+                    final Peca pieceAtDestination = tabuleiro.getQuadrado(candidateDestinationCoordinate).getPeca();
+                    if (pieceAtDestination == null) {
+                        movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, candidateDestinationCoordinate));
+                    }
+                    else {
+                        final Alliance pieceAlliance = pieceAtDestination.getAlliancePeca();
+                        if (this.alliancePeca != pieceAlliance) {
+                            movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, candidateDestinationCoordinate));
                         }
-                    } else {
-                        coordenadaCandidataADestino += possivelOffset;
-
-                        if(TabuleiroUtils.isCoordenadaValida(coordenadaCandidataADestino)) {
-                            Quadrado quadradoCandidato = tabuleiro.getQuadrado(coordenadaCandidataADestino);
-
-                            if (!quadradoCandidato.isQuadradoOcupado()) {
-                                movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this,coordenadaCandidataADestino));
-                            } else {
-                                if (this.alliancePeca != quadradoCandidato.getPeca().getAlliancePeca()) {
-                                    movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidataADestino));
-                                }
-                                break;
-                            }
-                        }
+                        break;
                     }
                 }
             }
         }
         
-        return Collections.unmodifiableList(movimentosPossiveis);
-    }
-    
-    private boolean verificarOitavaColuna(int coordenada) {
-        return TabuleiroUtils.OITAVA_COLUNA[coordenada];
-    }
-    
-    private boolean verificarPrimeiraColuna(int coordenada) {
-        return TabuleiroUtils.PRIMEIRA_COLUNA[coordenada];
+        return movimentosPossiveis;
     }
 
     @Override
@@ -151,5 +66,16 @@ public class Bispo extends Peca {
     @Override
     public Bispo movimentarPeca(Movimento move) {
         return new Bispo(move.getCoordenadaDestino(), move.getPecaMovimentada().getAlliancePeca());
+    }
+    private static boolean isFirstColumnExclusion(final int currentCandidate,
+                                                  final int candidateDestinationCoordinate) {
+        return (TabuleiroUtils.PRIMEIRA_COLUNA[candidateDestinationCoordinate] &&
+                ((currentCandidate == -9) || (currentCandidate == 7)));
+    }
+
+    private static boolean isEighthColumnExclusion(final int currentCandidate,
+                                                   final int candidateDestinationCoordinate) {
+        return TabuleiroUtils.OITAVA_COLUNA[candidateDestinationCoordinate] &&
+                        ((currentCandidate == -7) || (currentCandidate == 9));
     }
 }

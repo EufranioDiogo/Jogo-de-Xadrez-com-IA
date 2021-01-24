@@ -19,11 +19,15 @@ public class Torre extends Peca {
     private static final int[] possiveisOffsetsDaTorre = {-8, 8, -1, 1};
     
     public Torre(int posicaoPeca, Alliance alliancePeca) {
-        super(posicaoPeca, alliancePeca, TipoPeca.TORRE);
+        super(posicaoPeca, alliancePeca, TipoPeca.TORRE, true);
+    }
+    
+    public Torre(int posicaoPeca, Alliance alliancePeca, final boolean primeiroMovimento) {
+        super(posicaoPeca, alliancePeca, TipoPeca.TORRE, primeiroMovimento);
     }
 
     @Override
-    public List<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
+    public ArrayList<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
         ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
         
         for (final int possivelOffset : possiveisOffsetsDaTorre) {
@@ -92,7 +96,7 @@ public class Torre extends Peca {
             }
         }
         
-        return Collections.unmodifiableList(movimentosPossiveis);
+        return movimentosPossiveis;
     }
 
     private boolean verificarOitavaColuna(int coordenada) {

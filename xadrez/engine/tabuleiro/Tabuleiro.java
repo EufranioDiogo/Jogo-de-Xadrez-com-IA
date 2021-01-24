@@ -28,7 +28,7 @@ import jdk.nashorn.internal.objects.annotations.Constructor;
  */
 public class Tabuleiro {
     
-    private final List<Quadrado> tabuleiroJogo;
+    private final ArrayList<Quadrado> tabuleiroJogo;
     private final Collection<Peca> pecasBrancas;
     private final Collection<Peca> pecasPretas;
     
@@ -39,41 +39,46 @@ public class Tabuleiro {
     
     private Tabuleiro(Construtor construtor) {
         this.tabuleiroJogo = criarNovoTabuleiro(construtor);
+        
         this.pecasBrancas = calcularPecasActivas(this.tabuleiroJogo, Alliance.WHITE);
         this.pecasPretas = calcularPecasActivas(this.tabuleiroJogo, Alliance.BLACK);
-        System.out.println("more about");
         
         final Collection<Movimento> pecasBrancasMovimentosLegais = calcularMovimentosValidos(this.pecasBrancas);
-        System.out.println("cgcgc gctxcfxcfy");
         final Collection<Movimento> pecasPretasMovimentosLegais = calcularMovimentosValidos(this.pecasPretas);
-        System.out.println("Louco");
+        
         this.jogadorBranco = new JogadorBranco(this, pecasBrancasMovimentosLegais, pecasPretasMovimentosLegais);
         this.jogadorPreto = new JogadorPreto(this, pecasBrancasMovimentosLegais, pecasPretasMovimentosLegais);
         this.jogadorActual = construtor.proximoJogadorAJogar.proximoJogador(this.jogadorBranco, this.jogadorPreto);
     }
     
     public Collection<Movimento> calcularMovimentosValidos(final Collection<Peca> pecas) {
-        return pecas.stream().flatMap(peca -> peca.calcularPossiveisMovimentos(this).stream()).collect(Collectors.toList());
+        ArrayList<Movimento> movimentos = new ArrayList<>();
         
-        
+        for (Peca peca : pecas) {
+            final ArrayList<Movimento> possibleMoviments = peca.calcularPossiveisMovimentos(this);
+            
+            for (Movimento movimento : possibleMoviments) {
+                movimentos.add(movimento);
+            }
+        }
+        return movimentos;
     }
     
     
-    private List<Quadrado> criarNovoTabuleiro(Construtor construtor) {
-        final ArrayList<Quadrado> quadrados = new ArrayList<Quadrado>();
+    private ArrayList<Quadrado> criarNovoTabuleiro(Construtor construtor) {
+        final ArrayList<Quadrado> quadrados = new ArrayList<>();
         
         for (int i = 0; i < TabuleiroUtils.NUM_QUADRADOS; i++) {
             quadrados.add(Quadrado.criarQuadrado(i, construtor.configuracaoTabuleiro.get(i)));
         }
-        System.out.println("Segunda");
-        return  Collections.unmodifiableList(quadrados);
+        return  quadrados;
     }
     
     public Tabuleiro getTabuleiro() {
         return this;
     }
     
-    public Quadrado getQuadrado(final int[] coordenada) {
+    public Quadrado getQuadrado(final int coordenada) {
         return tabuleiroJogo.get(coordenada);
     }
 
@@ -193,9 +198,7 @@ public class Tabuleiro {
         }
         
         public Tabuleiro build() {
-            System.out.println("nsdjnnsjdjndsjndsjnsdj");
             Tabuleiro tab = new Tabuleiro(this);
-            System.out.println("kmskms");
             return tab;
         }
 

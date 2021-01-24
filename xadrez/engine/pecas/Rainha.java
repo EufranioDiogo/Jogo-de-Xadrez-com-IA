@@ -15,17 +15,29 @@ import java.util.List;
 public class Rainha extends Peca {
 
     public Rainha(int posicaoPeca, Alliance alliancePeca) {
-        super(posicaoPeca, alliancePeca, TipoPeca.RAINHA);
+        super(posicaoPeca, alliancePeca, TipoPeca.RAINHA, true);
+    }
+    public Rainha(int posicaoPeca, Alliance alliancePeca, final boolean primeiroMovimento) {
+        super(posicaoPeca, alliancePeca, TipoPeca.RAINHA, primeiroMovimento);
     }
 
     @Override
-    public List<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
+    public ArrayList<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
         ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
         
-        movimentosPossiveis.addAll(new Bispo(this.posicaoPeca, this.getAlliancePeca()).calcularPossiveisMovimentos(tabuleiro));
-        movimentosPossiveis.addAll(new Torre(this.posicaoPeca, this.getAlliancePeca()).calcularPossiveisMovimentos(tabuleiro));
+        ArrayList<Movimento> movimentosBispo = new Bispo(this.posicaoPeca, this.getAlliancePeca()).calcularPossiveisMovimentos(tabuleiro);
+        ArrayList<Movimento> movimentosTorre = new Torre(this.posicaoPeca, this.getAlliancePeca()).calcularPossiveisMovimentos(tabuleiro);
         
-        return Collections.unmodifiableList(movimentosPossiveis);
+        for (Movimento bispoMove : movimentosBispo) {
+            movimentosPossiveis.add(bispoMove);
+        }
+        
+        for (Movimento torreMovimento :  movimentosTorre) {
+            if (!movimentosPossiveis.contains(torreMovimento)) {
+                    movimentosPossiveis.add(torreMovimento);
+            }
+        }
+        return movimentosPossiveis;
     }
     @Override
     public String toString() {

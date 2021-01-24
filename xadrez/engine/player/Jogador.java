@@ -65,15 +65,12 @@ public abstract class Jogador {
         if(!isMovimentoLegal(movimento)) {
             return new MoveTransition(this.tabuleiro, movimento, EstadoMovimento.MOVIMENTO_ILEGAL);
         }
-        System.out.println("Passo1");
         final Tabuleiro tabuleiroTransicao = movimento.executarMovimento();
         
-        System.out.println("txeee");
         final Collection<Movimento> ataquesRei = Jogador.calcularAtaquesNaCasa(
                 tabuleiroTransicao.getJogadorActual().getOponente().getRei().getPosicaoPeca(),
                 tabuleiroTransicao.getJogadorActual().getMovimentosLegais());
         
-        System.out.println("Passo2");
         
         if (!ataquesRei.isEmpty()) {
             return new MoveTransition(this.tabuleiro, movimento, EstadoMovimento.DEIXA_JOGADOR_EM_CHECK);
