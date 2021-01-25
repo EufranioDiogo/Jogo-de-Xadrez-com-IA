@@ -29,11 +29,13 @@ public class PainelPecasPegas extends JPanel {
     private final JPanel PAINEL_SUL;
     private final String pathPecaIcon = "/home/ed/NetBeansProjects/ChessGameAI/art/";
     private final Color COR_PAINEL = Color.decode("0xFDF5E6");
-    private static final Dimension DIMENSAO_PECAS_CAPTURADAS = new Dimension(40, 80);
+    private static final Dimension DIMENSAO_PECAS_CAPTURADAS = new Dimension(30, 80);
+    private static final Dimension DIMENSAO_PAINEL_PECAS_CAPTURADAS = new Dimension(60, 400);
     private static final EtchedBorder BORDA_PAINEL = new EtchedBorder(EtchedBorder.RAISED);
     
     public PainelPecasPegas() {
         super(new BorderLayout());
+        this.setPreferredSize(DIMENSAO_PAINEL_PECAS_CAPTURADAS);
         setBackground(COR_PAINEL);
         setBorder(BORDA_PAINEL);
         this.PAINEL_NORTE = new JPanel(new GridLayout(8, 2));
@@ -55,7 +57,8 @@ public class PainelPecasPegas extends JPanel {
         
         for (final Movimento move : logsMovimentos.getMovimentos()) {
             if (move.isAtaque()) {
-                final Peca pecaPega = move.getPecaAtacada();
+                final Peca pecaPega = move.getTabuleiro().getQuadrado(move.getCoordenadaDestino()).getPeca();
+                
                 
                 if (null == pecaPega.getAlliancePeca()) {
                     throw new RuntimeException("erro, peca a ser atacada não identificada");
@@ -79,7 +82,7 @@ public class PainelPecasPegas extends JPanel {
             }
         });
         
-        Collections.sort(pecasBrancas, new Comparator<Peca> () {
+        Collections.sort(pecasPretas, new Comparator<Peca> () {
             @Override
             public int compare(Peca o1, Peca o2) {
                 return Integer.compare(o1.getValorPeca(), o2.getValorPeca());

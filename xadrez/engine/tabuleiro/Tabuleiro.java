@@ -36,12 +36,16 @@ public class Tabuleiro {
     public final JogadorPreto jogadorPreto;
     public final Jogador jogadorActual;
     
+    private final Pinhao enPassantPinhao;
+    
     
     private Tabuleiro(Construtor construtor) {
         this.tabuleiroJogo = criarNovoTabuleiro(construtor);
         
         this.pecasBrancas = calcularPecasActivas(this.tabuleiroJogo, Alliance.WHITE);
         this.pecasPretas = calcularPecasActivas(this.tabuleiroJogo, Alliance.BLACK);
+        enPassantPinhao = construtor.getEnPassantPawn();
+        
         
         final Collection<Movimento> pecasBrancasMovimentosLegais = calcularMovimentosValidos(this.pecasBrancas);
         final Collection<Movimento> pecasPretasMovimentosLegais = calcularMovimentosValidos(this.pecasPretas);
@@ -150,6 +154,10 @@ public class Tabuleiro {
     
     public Jogador getJogadorActual() {
         return this.jogadorActual;
+    }
+    
+    public Pinhao getEnPassantPinhao() {
+        return this.enPassantPinhao;
     }
     
     @Override

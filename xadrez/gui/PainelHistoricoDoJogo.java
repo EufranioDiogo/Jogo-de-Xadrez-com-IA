@@ -38,7 +38,7 @@ public class PainelHistoricoDoJogo extends JPanel {
         this.setVisible(true);
     }
 
-    void refazer(final Tabuleiro tabuleiro, final LogMovimento movimentoLog) {
+    public void remontar(final Tabuleiro tabuleiro, final LogMovimento movimentoLog) {
         int linhaActual = 0;
         this.modelo.clear();
         for (final Movimento movimento : movimentoLog.getMovimentos()) {
@@ -64,12 +64,15 @@ public class PainelHistoricoDoJogo extends JPanel {
             final String moveText = ultimoMovimento.toString();
             
             if (ultimoMovimento.getPecaMovimentada().getAlliancePeca() == WHITE) {
+                this.modelo.setValueAt(moveText + calcularCheckECheckMateHash(tabuleiro), linhaActual, 0);
+            } else if (ultimoMovimento.getPecaMovimentada().getAlliancePeca() == BLACK) {
                 this.modelo.setValueAt(moveText + calcularCheckECheckMateHash(tabuleiro), linhaActual - 1, 1);
             }
         }
         
         final JScrollBar vertical = scrollPane.getVerticalScrollBar();
         vertical.setValue(vertical.getMaximum());
+        validate();
     }
 
     private String calcularCheckECheckMateHash(final Tabuleiro tabuleiro) {
@@ -127,21 +130,20 @@ public class PainelHistoricoDoJogo extends JPanel {
         public void setValueAt(final Object valor, final int linha, final int coluna) {
             final Linha linhaActual;
             
-            if (this.values != null && this.values.size() > 0) {
-                if (this.values.size() <= linha) {
-                    linhaActual = new Linha();
-                    this.values.add(linhaActual);
-                    
-                    if (coluna == 0) {
-                        linhaActual.setMovimentoBranca((String)valor);
-                        fireTableCellUpdated(linha, coluna);
-                    } else if (coluna == 1) {
-                        linhaActual.setMovimentoPreta((String) valor);
-                        fireTableCellUpdated(linha, coluna);
-                    } else {
-                        throw new RuntimeException("Coluna Inválida a ser atribuida os dados");
-                    }
-                }
+            if (this.values.size() <= linha) {
+                linhaActual = new Linha();
+                this.values.add(linhaActual);
+            } else {
+                linhaActual = this.values.get(linha);
+            }
+            
+            
+            if (coluna == 0) {
+                linhaActual.setMovimentoBranca((String)valor);
+                fireTableRowsInserted(linha, coluna);
+            } else if (coluna == 1) {
+                linhaActual.setMovimentoPreta((String) valor);
+                fireTableCellUpdated(linha, coluna);
             }
         }
         
@@ -166,11 +168,11 @@ public class PainelHistoricoDoJogo extends JPanel {
         }
         
         public String getMovimentoBranca() {
-            return "";
+            return movimentoBranca;
         }
         
         public String getMovimentoPreta() {
-            return "";
+            return movimentoPreta;
         }
 
         public void setMovimentoBranca(String movimentoBranca) {

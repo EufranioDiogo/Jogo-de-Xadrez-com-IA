@@ -6,6 +6,8 @@ import chessgameai.xadrez.engine.tabuleiro.Quadrado;
 import chessgameai.xadrez.engine.tabuleiro.Tabuleiro;
 import chessgameai.xadrez.engine.tabuleiro.TabuleiroUtils;
 import chessgameai.xadrez.engine.player.MoveTransition;
+import chessgameai.xadrez.engine.player.agente.EstrategiaMovimento;
+import chessgameai.xadrez.engine.player.agente.MiniMax;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -13,6 +15,7 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -20,6 +23,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -30,36 +36,61 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 
 /**
  *
  * @Autor ed
  * Free Use - Livre_Uso
  */
-public class Mesa {
+public class Mesa extends Observable {
     private final JFrame gameFrame;
-    private final static int  WIDTH = 600, HEIGHT = 600;
+    private final PainelHistoricoDoJogo painelHistorico;
+    private final PainelPecasPegas painelPecasCapturadas;
+    private final LogMovimento logMovimento;
+    private final GameSetup gameSetup;
+    
+    
+    private final static int  WIDTH = 700, HEIGHT = 600;
     private final Dimension DIMENSAO_PAINEL_TABULEIRO = new Dimension(400, 350);
     private final Dimension DIMENSAO_PAINEL_QUADRADO = new Dimension(10, 10);
     private final PainelTabuleiro painelTabuleiro;
-    private Tabuleiro tabuleiro;
+    private static Tabuleiro tabuleiro;
     private final String pathPecaIcon = "/home/ed/NetBeansProjects/ChessGameAI/art/";
     private Quadrado origemQuadrado;
     private Quadrado destinoQuadrado;
     private Peca pecaMovidaPeloHumano;
+    private Movimento movimentoComputador;
     
-    public Mesa() {
+    
+    private static final Mesa INSTANCIA_MESA = new Mesa();
+    
+    
+    private Mesa() {
         gameFrame = new JFrame();
         this.gameFrame.setLayout(new BorderLayout());
         
         final JMenuBar menuBar = construirMenuBar();
         
+        
         tabuleiro = Tabuleiro.criarJogoPadrao();
         
         this.painelTabuleiro = new PainelTabuleiro();
+        this.logMovimento = new LogMovimento();
+        
+        this.addObserver(new ObservadorAI());
+        this.painelHistorico = new PainelHistoricoDoJogo();
+        this.painelPecasCapturadas = new PainelPecasPegas();
+        
+        this.gameSetup = new GameSetup(this.gameFrame, true);
+        
+        
+        this.gameFrame.add(this.painelPecasCapturadas, BorderLayout.WEST);
         this.gameFrame.add(this.painelTabuleiro, BorderLayout.CENTER);
+        this.gameFrame.add(this.painelHistorico, BorderLayout.EAST);
         
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.gameFrame.setJMenuBar(menuBar);
@@ -68,15 +99,143 @@ public class Mesa {
         this.gameFrame.setSize(WIDTH, HEIGHT);
         this.gameFrame.setVisible(true);
     }
-
-    private JMenuBar construirMenuBar() {
-        final JMenuBar menuBar = new JMenuBar();
-        menuBar.add(createFileMenu());
-        menuBar.add(createExitGame());
-        
-        return menuBar;
+    
+    private static Tabuleiro getTabuleiro() {
+        return tabuleiro;
+    } 
+    public static Mesa get() {
+        return INSTANCIA_MESA;
     }
+    
+    public void show() throws IOException {
+        Mesa.get().getMoveLog().clear();
+        Mesa.get().getPainelHistorico().remontar(tabuleiro, Mesa.get().getMoveLog());
+        Mesa.get().getPainelPecasCapturadas().remontar(Mesa.get().getMoveLog());
+        Mesa.get().getPainelTabuleiro().drawTabuleiro(Mesa.getTabuleiro());
+    }
+    
+    private GameSetup getGameSetup() {
+        return this.gameSetup;
+    }
+    
+    private void setupUpdate(final GameSetup gameSetup) {
+        setChanged();
+        notifyObservers(gameSetup);
+    }
+    
+    public void updateGameBoard(Tabuleiro tabuleiro) {
+        this.tabuleiro = tabuleiro;
+    }
+    
+    public void updateMovimentoComputador(final Movimento movimento) {
+        this.movimentoComputador = movimento;
+    }
+    
+    public LogMovimento getMoveLog() {
+        return this.logMovimento;
+    }
+    
+    public PainelHistoricoDoJogo getPainelHistorico() {
+        return this.painelHistorico;
+    }
+    
+    public PainelPecasPegas getPainelPecasCapturadas() {
+        return this.painelPecasCapturadas;
+    }
+    
+    public PainelTabuleiro getPainelTabuleiro() {
+        return this.painelTabuleiro;
+    }
+    
+    public void moveFeitoUpdate(final PlayerType tipoJogador) {
+        setChanged();
+        notifyObservers(tipoJogador);
+    }
+    
+    private static class ObservadorAI implements Observer {
 
+        @Override
+        public void update(Observable o, Object arg) {
+           if (Mesa.get().getGameSetup().isAIPlayer(Mesa.get().getTabuleiro().getJogadorActual()) &&
+                   !Mesa.get().getTabuleiro().getJogadorActual().isEmCheckMate() &&
+                   !Mesa.get().getTabuleiro().getJogadorActual().isEmStaleMate()) {
+               // Create an AI Thread and execute
+               
+               final PensamentoAI pensamentoAI = new PensamentoAI();
+               
+               pensamentoAI.execute();
+           }
+           
+           if (Mesa.get().getTabuleiro().getJogadorActual().isEmCheckMate()) {
+               System.out.println("CHECK MATE para " + Mesa.get().getTabuleiro().getJogadorActual());
+           }
+           if (Mesa.get().getTabuleiro().getJogadorActual().isEmStaleMate()) {
+               System.out.println("Stale Mate para " + Mesa.get().getTabuleiro().getJogadorActual());
+           }
+        }
+    
+    }
+    
+    
+    private static class PensamentoAI extends SwingWorker<Movimento, String> {
+        
+        private PensamentoAI() {
+            
+        }
+        
+        @Override
+        protected Movimento doInBackground() throws Exception {
+            final EstrategiaMovimento minimax = new MiniMax(3);
+            
+            final Movimento melhorMovimento = minimax.executar(Mesa.getTabuleiro());
+            
+            System.out.println( "Encontrou: " + melhorMovimento);
+            
+            return melhorMovimento;
+        }
+        
+        @Override
+        public void done() {
+            try {
+                final Movimento melhorMovimento = get();
+                
+                Mesa.get().updateMovimentoComputador(melhorMovimento);
+                Mesa.get().updateGameBoard(Mesa.get().getTabuleiro().getJogadorActual().fazerMovimento(melhorMovimento).getTabuleiro());
+                Mesa.get().getMoveLog().adicionarMovimento(melhorMovimento);
+                Mesa.get().getPainelHistorico().remontar(Mesa.getTabuleiro(), Mesa.get().getMoveLog());
+                Mesa.get().getPainelPecasCapturadas().remontar(Mesa.get().getMoveLog());
+                Mesa.get().moveFeitoUpdate(PlayerType.COMPUTER);
+                
+                try {
+                    Mesa.get().getPainelTabuleiro().drawTabuleiro(Mesa.getTabuleiro());
+                } catch (IOException ex) {
+                    Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ExecutionException ex) {
+                Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }
+    
+    private JMenu createMenuOpcoes() {
+        final JMenu menuOpcoes = new JMenu("Opções");
+        final JMenuItem setupGameMenuItem = new JMenuItem("Configuar Jogo");
+        
+        setupGameMenuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Mesa.get().getGameSetup().promptUser();
+                Mesa.get().setupUpdate(Mesa.get().getGameSetup());
+            }
+        });
+        
+        menuOpcoes.add(setupGameMenuItem);
+        return menuOpcoes;
+    }
+    
     private JMenu createFileMenu() {
        final JMenu fileMenu = new JMenu("File");
        final JMenuItem openPGN = new JMenuItem("Load PGN file");
@@ -97,6 +256,16 @@ public class Mesa {
         });
         return exitGame;
     }
+
+    private JMenuBar construirMenuBar() {
+        final JMenuBar menuBar = new JMenuBar();
+        menuBar.add(createFileMenu());
+        menuBar.add(createExitGame());
+        menuBar.add(createMenuOpcoes());
+        return menuBar;
+    }
+
+    
     
     private class PainelTabuleiro extends JPanel {
         final List<PainelQuadrado> quadradosTabuleiro;
@@ -189,6 +358,11 @@ public class Mesa {
     }
     
     
+    enum PlayerType {
+        HUMAN,
+        COMPUTER
+    }
+    
     private class PainelQuadrado extends JPanel {
         private final int idQuadrado;
 
@@ -235,7 +409,7 @@ public class Mesa {
 
                                     if (movimentacao.getEstadoMovimento().isDone()) {
                                         tabuleiro = movimentacao.getTabuleiro();
-                                        
+                                        logMovimento.adicionarMovimento(movimento);
                                         //Move Log
                                     }
 
@@ -243,6 +417,12 @@ public class Mesa {
                                     @Override
                                     public void run() {
                                             try {
+                                                painelHistorico.remontar(tabuleiro, logMovimento);
+                                                painelPecasCapturadas.remontar(logMovimento);
+                                                
+                                                if (gameSetup.isAIPlayer(tabuleiro.getJogadorActual())) {
+                                                    Mesa.get().moveFeitoUpdate(PlayerType.HUMAN);
+                                                }
                                                 painelTabuleiro.drawTabuleiro(tabuleiro);
                                             } catch (IOException ex) {
                                                 Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);

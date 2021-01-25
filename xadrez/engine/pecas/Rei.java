@@ -43,7 +43,7 @@ public class Rei extends Peca {
                 if (!quadradoCandidato.isQuadradoOcupado()) {
                     movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, coordenadaCandidata));
                 } else {
-                    movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidata));
+                    movimentosPossiveis.add(new Movimento.MajorAttackMove(tabuleiro, this, coordenadaCandidata));
                 }
             }
         }

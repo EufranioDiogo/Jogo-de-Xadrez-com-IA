@@ -47,7 +47,7 @@ public class Bispo extends Peca {
                     else {
                         final Alliance pieceAlliance = pieceAtDestination.getAlliancePeca();
                         if (this.alliancePeca != pieceAlliance) {
-                            movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, candidateDestinationCoordinate));
+                            movimentosPossiveis.add(new Movimento.MajorAttackMove(tabuleiro, this, candidateDestinationCoordinate));
                         }
                         break;
                     }

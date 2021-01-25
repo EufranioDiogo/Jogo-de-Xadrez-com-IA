@@ -71,7 +71,7 @@ public class Torre extends Peca {
                         movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this,coordenadaCandidataADestino));
                     } else {
                         if (this.alliancePeca != quadrado.getPeca().getAlliancePeca()) {
-                            movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidataADestino));   
+                            movimentosPossiveis.add(new Movimento.MajorAttackMove(tabuleiro, this, coordenadaCandidataADestino));   
                         }
                         break;
                     }
@@ -87,7 +87,7 @@ public class Torre extends Peca {
                             movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this,coordenadaCandidataADestino));
                         } else {
                             if (this.alliancePeca != quadradoCandidato.getPeca().getAlliancePeca()) {
-                                movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidataADestino));
+                                movimentosPossiveis.add(new Movimento.MajorAttackMove(tabuleiro, this, coordenadaCandidataADestino));
                             }
                             break;
                         }

@@ -7,6 +7,7 @@ package chessgameai;
 
 import chessgameai.xadrez.engine.tabuleiro.Tabuleiro;
 import chessgameai.xadrez.gui.Mesa;
+import java.io.IOException;
 
 /**
  *
@@ -17,9 +18,8 @@ public class ChessGameAI {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        Mesa mesa = new Mesa();
-        
+    public static void main(String[] args) throws IOException {
+        Mesa.get().show();
     }
     
 }

@@ -47,7 +47,7 @@ public class Cavalo extends Peca{
                     movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this,coordenadaCandidataADestino));
                 } else {
                     if (this.alliancePeca != quadroCandidato.getPeca().getAlliancePeca()) {
-                        movimentosPossiveis.add(new Movimento.MovimentoAtaque(tabuleiro, this, coordenadaCandidataADestino));
+                        movimentosPossiveis.add(new Movimento.MajorAttackMove(tabuleiro, this, coordenadaCandidataADestino));
                     }
                 }
             }

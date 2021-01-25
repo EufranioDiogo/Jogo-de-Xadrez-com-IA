@@ -18,6 +18,7 @@ public class TabuleiroUtils {
     public final static boolean[] OITAVA_COLUNA = iniciarColunas(7);
     
     public static final boolean[] OITAVA_LINHA = iniciarLinha(0);
+    public static final boolean[] PRIMEIRA_LINHA = iniciarLinha(0);
     public static final boolean[] SEGUNDA_LINHA = iniciarLinha(6);
     
     public static final boolean[] QUINTA_LINHA = iniciarLinha(3);

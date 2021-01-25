@@ -65,6 +65,8 @@ public abstract class Jogador {
         if(!isMovimentoLegal(movimento)) {
             return new MoveTransition(this.tabuleiro, movimento, EstadoMovimento.MOVIMENTO_ILEGAL);
         }
+        // Oponente preto
+        
         final Tabuleiro tabuleiroTransicao = movimento.executarMovimento();
         
         final Collection<Movimento> ataquesRei = Jogador.calcularAtaquesNaCasa(
