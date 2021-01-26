@@ -199,18 +199,25 @@ public class Mesa extends Observable {
             try {
                 final Movimento melhorMovimento = get();
                 
-                Mesa.get().updateMovimentoComputador(melhorMovimento);
-                Mesa.get().updateGameBoard(Mesa.get().getTabuleiro().getJogadorActual().fazerMovimento(melhorMovimento).getTabuleiro());
-                Mesa.get().getMoveLog().adicionarMovimento(melhorMovimento);
-                Mesa.get().getPainelHistorico().remontar(Mesa.getTabuleiro(), Mesa.get().getMoveLog());
-                Mesa.get().getPainelPecasCapturadas().remontar(Mesa.get().getMoveLog());
-                Mesa.get().moveFeitoUpdate(PlayerType.COMPUTER);
-                
-                try {
-                    Mesa.get().getPainelTabuleiro().drawTabuleiro(Mesa.getTabuleiro());
-                } catch (IOException ex) {
-                    Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
+                if (melhorMovimento != null) {
+                    Mesa.get().updateMovimentoComputador(melhorMovimento);
+                    Mesa.get().updateGameBoard(Mesa.get().getTabuleiro().getJogadorActual().fazerMovimento(melhorMovimento).getTabuleiro());
+                    Mesa.get().getMoveLog().adicionarMovimento(melhorMovimento);
+                    Mesa.get().getPainelHistorico().remontar(Mesa.getTabuleiro(), Mesa.get().getMoveLog());
+                    Mesa.get().getPainelPecasCapturadas().remontar(Mesa.get().getMoveLog());
+                    Mesa.get().moveFeitoUpdate(PlayerType.COMPUTER);
+
+                    try {
+                        Mesa.get().getPainelTabuleiro().drawTabuleiro(Mesa.getTabuleiro());
+                    } catch (IOException ex) {
+                        Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    final PensamentoAI pensamentoAI = new PensamentoAI();
+               
+                    pensamentoAI.execute();
                 }
+                
             } catch (InterruptedException ex) {
                 Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ExecutionException ex) {

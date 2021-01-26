@@ -39,7 +39,7 @@ class GameSetup extends JDialog {
         final ButtonGroup blackGroup = new ButtonGroup();
         blackGroup.add(blackHumanButton);
         blackGroup.add(blackComputerButton);
-        blackHumanButton.setSelected(true);
+        blackComputerButton.setSelected(true);
 
         getContentPane().add(myPanel);
         myPanel.add(new JLabel("White"));
