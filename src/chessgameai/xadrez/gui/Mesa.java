@@ -501,7 +501,13 @@ public class Mesa extends Observable {
                 }
             });
             setPreferredSize(DIMENSAO_PAINEL_QUADRADO);
-            setBackground(cor);
+            if (TabuleiroUtils.OITAVA_COLUNA[idQuadrado] || TabuleiroUtils.SETIMA_COLUNA[idQuadrado] || 
+                TabuleiroUtils.SEXTA_COLUNA[idQuadrado]) {
+                setBackground(new Color(0, 0, 0));
+            } else {
+                setBackground(cor);    
+            }
+            
             validate();
         }
 
@@ -519,7 +525,6 @@ public class Mesa extends Observable {
                 
                 final BufferedImage image = ImageIO.read(novaImagem);
                 final JLabel label = new JLabel(new ImageIcon(image));
-                label.setBackground(Color.red);
                 
                 add(label);
             }
