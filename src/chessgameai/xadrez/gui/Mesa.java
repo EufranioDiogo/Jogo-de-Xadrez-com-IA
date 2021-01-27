@@ -25,18 +25,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.lang.model.element.Element;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -201,11 +198,14 @@ public class Mesa extends Observable {
                pensamentoAI.run();
            }
            
-           if (Mesa.get().getTabuleiro().getJogadorActual().isEmCheckMate()) {
-               System.out.println("CHECK MATE para " + Mesa.get().getTabuleiro().getJogadorActual());
+           if (Mesa.getTabuleiro().getJogadorActual().isEmCheckMate()) {
+               System.out.println("CHECK MATE para " + Mesa.getTabuleiro().getJogadorActual());
            }
-           if (Mesa.get().getTabuleiro().getJogadorActual().isEmStaleMate()) {
-               System.out.println("Stale Mate para " + Mesa.get().getTabuleiro().getJogadorActual());
+           if (Mesa.getTabuleiro().getJogadorActual().isEmCheck()) {
+               System.out.println("CHECK para " + Mesa.getTabuleiro().getJogadorActual());
+           }
+           if (Mesa.getTabuleiro().getJogadorActual().isEmStaleMate()) {
+               System.out.println("Stale Mate para " + Mesa.getTabuleiro().getJogadorActual());
            }
         }
     
@@ -507,12 +507,7 @@ public class Mesa extends Observable {
             } else {
                 setBackground(cor);    
             }
-            
             validate();
-        }
-
-        private void adicionarCorQuadrado() {
-            
         }
         
         private void colocarIconsPeca(final Tabuleiro tabuleiro) throws IOException {
