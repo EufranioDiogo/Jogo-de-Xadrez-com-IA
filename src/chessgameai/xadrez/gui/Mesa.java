@@ -59,7 +59,7 @@ public class Mesa extends Observable {
     private final Dimension DIMENSAO_PAINEL_QUADRADO = new Dimension(10, 10);
     private final PainelTabuleiro painelTabuleiro;
     private static Tabuleiro tabuleiro;
-    private final String pathPecaIcon = "/home/ed/NetBeansProjects/ChessGameAI/art/";
+    private final String pathPecaIcon = "/Users/eliananeto/Downloads/Jogo-de-Xadrez-com-IA-main/art/";
     private Quadrado origemQuadrado;
     private Quadrado destinoQuadrado;
     private Peca pecaMovidaPeloHumano;
@@ -180,10 +180,15 @@ public class Mesa extends Observable {
         }
 
         if (Mesa.get().getTabuleiro().getJogadorActual().isEmCheckMate()) {
-            System.out.println("CHECK MATE para " + Mesa.get().getTabuleiro().getJogadorActual());
+            JOptionPane.showMessageDialog(null, "CHECK MATE para " + Mesa.get().getTabuleiro().getJogadorActual());
+            
         }
         if (Mesa.get().getTabuleiro().getJogadorActual().isEmStaleMate()) {
-            System.out.println("Stale Mate para " + Mesa.get().getTabuleiro().getJogadorActual());
+            JOptionPane.showMessageDialog(null, "Stale MATE para " + Mesa.get().getTabuleiro().getJogadorActual());
+
+        }
+        else if(Mesa.getTabuleiro().getJogadorActual().isEmCheck()) {
+            JOptionPane.showMessageDialog(null, "CKECK para " + Mesa.get().getTabuleiro().getJogadorActual());
         }
     }
     

@@ -39,6 +39,13 @@ public class JogadorBranco extends Jogador {
     }
 
     @Override
+    public String toString() {
+        return "JogadorBranco{" + '}';
+    }
+    
+    
+
+    @Override
     protected Collection<Movimento> calcularReiCastles(final Collection<Movimento> movimentosJogador, final Collection<Movimento> movimentosInimigos) {
         final List<Movimento> reiCastles = new ArrayList<>();
         

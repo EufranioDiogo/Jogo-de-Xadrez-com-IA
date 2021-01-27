@@ -28,75 +28,29 @@ public class Torre extends Peca {
 
     @Override
     public ArrayList<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
-        ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
-        
-        for (final int possivelOffset : possiveisOffsetsDaTorre) {
-            int coordenadaCandidataADestino = this.getPosicaoPeca();
-            
-            if (possivelOffset == 1 || possivelOffset == -1) {
-                int limiteSuperior = 0;
-                int limiteInferior = 0;
-                
-                if (coordenadaCandidataADestino > -1 && coordenadaCandidataADestino < 8) {
-                    limiteInferior = 0;
-                    limiteSuperior = 7;
-                } else if (coordenadaCandidataADestino > 7 && coordenadaCandidataADestino < 16) {
-                    limiteInferior = 8;
-                    limiteSuperior = 15;
-                } else if (coordenadaCandidataADestino > 15 && coordenadaCandidataADestino < 24) {
-                    limiteInferior = 16;
-                    limiteSuperior = 23;
-                } else if (coordenadaCandidataADestino > 23 && coordenadaCandidataADestino < 32) {
-                    limiteInferior = 24;
-                    limiteSuperior = 31;
-                } else if (coordenadaCandidataADestino > 31 && coordenadaCandidataADestino < 40) {
-                    limiteInferior = 32;
-                    limiteSuperior = 39;
-                } else if (coordenadaCandidataADestino > 39 && coordenadaCandidataADestino < 48) {
-                    limiteInferior = 40;
-                    limiteSuperior = 47;
-                } else if (coordenadaCandidataADestino > 47 && coordenadaCandidataADestino < 56) {
-                    limiteInferior = 48;
-                    limiteSuperior = 55;
-                } else if (coordenadaCandidataADestino > 55 && coordenadaCandidataADestino < 64) {
-                    limiteInferior = 56;
-                    limiteSuperior = 63;
+        final ArrayList<Movimento> legalMoves = new ArrayList<>();
+        for (final int currentCandidateOffset : possiveisOffsetsDaTorre) {
+            int candidateDestinationCoordinate = this.posicaoPeca;
+            while (TabuleiroUtils.isCoordenadaValida(candidateDestinationCoordinate)) {
+                if (isColumnExclusion(currentCandidateOffset, candidateDestinationCoordinate)) {
+                    break;
                 }
-                
-                while (coordenadaCandidataADestino > limiteInferior && coordenadaCandidataADestino < limiteSuperior) {
-                    coordenadaCandidataADestino += possivelOffset;
-                    Quadrado quadrado = tabuleiro.getQuadrado(coordenadaCandidataADestino);
-
-                    if (!quadrado.isQuadradoOcupado()) {
-                        movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this,coordenadaCandidataADestino));
+                candidateDestinationCoordinate += currentCandidateOffset;
+                if (TabuleiroUtils.isCoordenadaValida(candidateDestinationCoordinate)) {
+                    final Peca pieceAtDestination = tabuleiro.getQuadrado(candidateDestinationCoordinate).getPeca();
+                    if (pieceAtDestination == null) {
+                        legalMoves.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, candidateDestinationCoordinate));
                     } else {
-                        if (this.alliancePeca != quadrado.getPeca().getAlliancePeca()) {
-                            movimentosPossiveis.add(new Movimento.MajorAttackMove(tabuleiro, this, coordenadaCandidataADestino));   
+                        final Alliance pieceAtDestinationAllegiance = pieceAtDestination.getAlliancePeca();
+                        if (this.getAlliancePeca() != pieceAtDestinationAllegiance) {
+                            legalMoves.add(new Movimento.MovimentoAtaque(tabuleiro, this, candidateDestinationCoordinate));
                         }
                         break;
                     }
                 }
-            } else {
-                while (TabuleiroUtils.isCoordenadaValida(coordenadaCandidataADestino)) {
-                    coordenadaCandidataADestino += possivelOffset;
-
-                    if(TabuleiroUtils.isCoordenadaValida(coordenadaCandidataADestino)) {
-                        Quadrado quadradoCandidato = tabuleiro.getQuadrado(coordenadaCandidataADestino);
-
-                        if (!quadradoCandidato.isQuadradoOcupado()) {
-                            movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this,coordenadaCandidataADestino));
-                        } else {
-                            if (this.alliancePeca != quadradoCandidato.getPeca().getAlliancePeca()) {
-                                movimentosPossiveis.add(new Movimento.MajorAttackMove(tabuleiro, this, coordenadaCandidataADestino));
-                            }
-                            break;
-                        }
-                    }
-                }
             }
         }
-        
-        return movimentosPossiveis;
+        return legalMoves;
     }
 
     private boolean verificarOitavaColuna(int coordenada) {
@@ -113,5 +67,11 @@ public class Torre extends Peca {
     @Override
     public Torre movimentarPeca(Movimento move) {
         return new Torre(move.getCoordenadaDestino(), move.getPecaMovimentada().getAlliancePeca());
+    }
+    
+    private static boolean isColumnExclusion(final int currentCandidate,
+                                             final int candidateDestinationCoordinate) {
+        return (TabuleiroUtils.PRIMEIRA_COLUNA[candidateDestinationCoordinate] && (currentCandidate == -1)) ||
+               (TabuleiroUtils.OITAVA_COLUNA[candidateDestinationCoordinate] && (currentCandidate == 1));
     }
 }

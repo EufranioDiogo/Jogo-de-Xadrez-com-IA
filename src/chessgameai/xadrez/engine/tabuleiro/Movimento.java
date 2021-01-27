@@ -469,8 +469,18 @@ public abstract class Movimento {
         
         public static Movimento criarMovimento(final Tabuleiro tabuleiro, final int posicaoActual, final int posicaoDestino) {
             for(final Movimento movimento : tabuleiro.getMovimentosValidos()) {
-                if (movimento.getPosicaoActual() == posicaoActual && movimento.getCoordenadaDestino() == posicaoDestino) {
-                    return movimento;
+                if (TabuleiroUtils.OITAVA_COLUNA[posicaoActual] || TabuleiroUtils.SEXTA_COLUNA[posicaoActual] || TabuleiroUtils.SETIMA_COLUNA[posicaoActual]
+                        ||   TabuleiroUtils.OITAVA_COLUNA[posicaoDestino] || TabuleiroUtils.SEXTA_COLUNA[posicaoDestino] || TabuleiroUtils.SETIMA_COLUNA[posicaoDestino]
+                           )
+                {
+                    return null;
+                   
+                }
+                else if (movimento.getPosicaoActual() == posicaoActual && movimento.getCoordenadaDestino() == posicaoDestino) {
+                     return movimento;
+                }
+ {
+                    
                 }
             }
             return null;
