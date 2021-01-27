@@ -37,6 +37,11 @@ public class JogadorPreto extends Jogador{
     public Jogador getOponente() {
         return this.tabuleiro.getJogadorBranco();
     }
+    
+    @Override
+    public String toString() {
+        return "JogadorPreto{" + '}';
+    }
 
     @Override
     protected Collection<Movimento> calcularReiCastles(final Collection<Movimento> movimentosJogador, final Collection<Movimento> movimentosInimigos) {
