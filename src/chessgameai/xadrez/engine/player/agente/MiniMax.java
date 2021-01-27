@@ -21,16 +21,14 @@ public class MiniMax implements EstrategiaMovimento {
     
     @Override
     public Movimento executar(Tabuleiro tabuleiro) {
-        final long startTime = System.currentTimeMillis();
+        //final long startTime = System.currentTimeMillis();
         
         Movimento melhorMovimento = null;
         int maiorValorVisto = Integer.MIN_VALUE;
         int menorValorVisto = Integer.MAX_VALUE;
         int valorActual;
         
-        System.out.println(tabuleiro.getJogadorActual() +  " Pensando com profundidade = " +  profundidade);
-        
-        int numMoves = tabuleiro.getJogadorActual().getMovimentosLegais().size();
+        //int numMoves = tabuleiro.getJogadorActual().getMovimentosLegais().size();
         
         for (final Movimento movimento: tabuleiro.getJogadorActual().getMovimentosLegais()) {
             final MoveTransition movimentoTransicao = tabuleiro.getJogadorActual().fazerMovimento(movimento);
@@ -51,9 +49,9 @@ public class MiniMax implements EstrategiaMovimento {
             }
         }
         
-        final long tempoExecutado = System.currentTimeMillis() - startTime;
+        //final long tempoExecutado = System.currentTimeMillis() - startTime;
         
-        System.out.println("Tempo Executado: " + tempoExecutado);
+        //System.out.println("Tempo Executado: " + tempoExecutado);
         return melhorMovimento;
     }
 

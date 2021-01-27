@@ -81,7 +81,6 @@ public class Mesa extends Observable {
         this.painelTabuleiro = new PainelTabuleiro();
         this.logMovimento = new LogMovimento();
         
-        this.addObserver(new ObservadorAI());
         this.painelHistorico = new PainelHistoricoDoJogo();
         this.painelPecasCapturadas = new PainelPecasPegas();
         
@@ -150,20 +149,56 @@ public class Mesa extends Observable {
     public void moveFeitoUpdate(final PlayerType tipoJogador) {
         setChanged();
         notifyObservers(tipoJogador);
+        
+        if (Mesa.get().getGameSetup().isAIPlayer(Mesa.getTabuleiro().getJogadorActual()) &&
+                !Mesa.getTabuleiro().getJogadorActual().isEmCheckMate() &&
+                !Mesa.getTabuleiro().getJogadorActual().isEmStaleMate()) {
+            // Create an AI Thread and execute
+
+            final PensamentoAI pensamentoAI = new PensamentoAI();
+
+            final EstrategiaMovimento minimax = new MiniMax(3);
+            
+            Movimento melhorMovimento = minimax.executar(Mesa.getTabuleiro());
+            
+            if (melhorMovimento != null) {
+                    Mesa.get().updateMovimentoComputador(melhorMovimento);
+                    Mesa.get().updateGameBoard(Mesa.get().getTabuleiro().getJogadorActual().fazerMovimento(melhorMovimento).getTabuleiro());
+                    Mesa.get().getMoveLog().adicionarMovimento(melhorMovimento);
+                    Mesa.get().getPainelHistorico().remontar(Mesa.getTabuleiro(), Mesa.get().getMoveLog());
+                    Mesa.get().getPainelPecasCapturadas().remontar(Mesa.get().getMoveLog());
+                    Mesa.get().moveFeitoUpdate(PlayerType.COMPUTER);
+
+                    try {
+                        Mesa.get().getPainelTabuleiro().drawTabuleiro(Mesa.getTabuleiro());
+                    } catch (IOException ex) {
+                        Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    System.out.println("Erro");
+                }
+        }
+
+        if (Mesa.get().getTabuleiro().getJogadorActual().isEmCheckMate()) {
+            System.out.println("CHECK MATE para " + Mesa.get().getTabuleiro().getJogadorActual());
+        }
+        if (Mesa.get().getTabuleiro().getJogadorActual().isEmStaleMate()) {
+            System.out.println("Stale Mate para " + Mesa.get().getTabuleiro().getJogadorActual());
+        }
     }
     
     private static class ObservadorAI implements Observer {
 
         @Override
         public void update(Observable o, Object arg) {
-           if (Mesa.get().getGameSetup().isAIPlayer(Mesa.get().getTabuleiro().getJogadorActual()) &&
-                   !Mesa.get().getTabuleiro().getJogadorActual().isEmCheckMate() &&
-                   !Mesa.get().getTabuleiro().getJogadorActual().isEmStaleMate()) {
+           if (Mesa.get().getGameSetup().isAIPlayer(Mesa.getTabuleiro().getJogadorActual()) &&
+                   !Mesa.getTabuleiro().getJogadorActual().isEmCheckMate() &&
+                   !Mesa.getTabuleiro().getJogadorActual().isEmStaleMate()) {
                // Create an AI Thread and execute
                
                final PensamentoAI pensamentoAI = new PensamentoAI();
                
-               pensamentoAI.execute();
+               pensamentoAI.run();
            }
            
            if (Mesa.get().getTabuleiro().getJogadorActual().isEmCheckMate()) {
@@ -178,6 +213,7 @@ public class Mesa extends Observable {
     
     
     private static class PensamentoAI extends SwingWorker<Movimento, String> {
+        Movimento melhorMovimento;
         
         private PensamentoAI() {
             
@@ -187,17 +223,16 @@ public class Mesa extends Observable {
         protected Movimento doInBackground() throws Exception {
             final EstrategiaMovimento minimax = new MiniMax(3);
             
-            final Movimento melhorMovimento = minimax.executar(Mesa.getTabuleiro());
-            
-            System.out.println( "Encontrou: " + melhorMovimento);
+            Movimento melhorMovimento = minimax.executar(Mesa.getTabuleiro());
             
             return melhorMovimento;
         }
         
+        
         @Override
         public void done() {
             try {
-                final Movimento melhorMovimento = get();
+                Movimento melhorMovimento = get();
                 
                 if (melhorMovimento != null) {
                     Mesa.get().updateMovimentoComputador(melhorMovimento);
@@ -218,10 +253,8 @@ public class Mesa extends Observable {
                     pensamentoAI.execute();
                 }
                 
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ExecutionException ex) {
-                Logger.getLogger(Mesa.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (final Exception e) {
+                e.printStackTrace();
             }
         }
         

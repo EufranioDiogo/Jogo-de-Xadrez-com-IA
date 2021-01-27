@@ -14,6 +14,7 @@ import java.util.Map;
 public class TabuleiroUtils {
     public final static boolean[] PRIMEIRA_COLUNA = iniciarColunas(0);
     public final static boolean[] SEGUNDA_COLUNA = iniciarColunas(1);
+    public final static boolean[] SEXTA_COLUNA = iniciarColunas(5);
     public final static boolean[] SETIMA_COLUNA = iniciarColunas(6);
     public final static boolean[] OITAVA_COLUNA = iniciarColunas(7);
     
@@ -58,7 +59,7 @@ public class TabuleiroUtils {
     }
     
     public static boolean isCoordenadaValida(final int coordenada) {
-        return coordenada > -1 && coordenada < NUM_QUADRADOS;
+        return (coordenada > -1 && coordenada < NUM_QUADRADOS) && !OITAVA_COLUNA[coordenada] && !SETIMA_COLUNA[coordenada] && !SEXTA_COLUNA[coordenada];
     }
     
     public static int getCoordenadaDaPosicao(final String posicao) {

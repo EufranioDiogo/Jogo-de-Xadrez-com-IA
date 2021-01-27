@@ -65,7 +65,6 @@ class GameSetup extends JDialog {
 
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Cancel");
                 GameSetup.this.setVisible(false);
             }
         });
@@ -84,7 +83,7 @@ class GameSetup extends JDialog {
     }
 
     boolean isAIPlayer(final Jogador player) {
-        if(player.getJogadorAlliance()== Alliance.WHITE) {
+        if(player.getJogadorAlliance() == Alliance.WHITE) {
             return getWhitePlayerType() == PlayerType.COMPUTER;
         }
         return getBlackPlayerType() == PlayerType.COMPUTER;

@@ -92,11 +92,11 @@ public abstract class Jogador {
         return false;
     }
     
-    public static Collection<Movimento> calcularAtaquesNaCasa(int posicaoRei, Collection<Movimento> movimentoOponentes) {
+    public static Collection<Movimento> calcularAtaquesNaCasa(int posicaoASerAtacada, Collection<Movimento> movimentoOponentes) {
         final List<Movimento> movimentosAtaque = new ArrayList<>();
         
         for (final Movimento movimento : movimentoOponentes) {
-            if (posicaoRei == movimento.getCoordenadaDestino()) {
+            if (posicaoASerAtacada == movimento.getCoordenadaDestino()) {
                 movimentosAtaque.add(movimento);
             }
         }
