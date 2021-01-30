@@ -22,24 +22,23 @@ public class MiniMax implements EstrategiaMovimento {
     @Override
     public Movimento executar(Tabuleiro tabuleiro) {
         Movimento melhorMovimento = null;
-        int maiorValorVisto = Integer.MIN_VALUE;
-        int menorValorVisto = Integer.MAX_VALUE;
+        int alpha = Integer.MIN_VALUE;
+        int beta = Integer.MAX_VALUE;
         int valorActual;
         
         for (final Movimento movimento: tabuleiro.getJogadorActual().getMovimentosLegais()) {
             final MoveTransition movimentoTransicao = tabuleiro.getJogadorActual().fazerMovimento(movimento);
             
             if (movimentoTransicao.getEstadoMovimento().isDone()) {
-                System.out.println(tabuleiro.getJogadorActual().getJogadorAlliance());
                 valorActual = tabuleiro.getJogadorActual().getJogadorAlliance() == Alliance.WHITE ? 
-                        min(movimentoTransicao.getTabuleiro(), profundidade - 1) : 
-                        max(movimentoTransicao.getTabuleiro(), profundidade - 1);
+                        min(movimentoTransicao.getTabuleiro(), profundidade - 1, alpha, beta) : 
+                        max(movimentoTransicao.getTabuleiro(), profundidade - 1, alpha, beta);
                 
-                if (tabuleiro.getJogadorActual().getJogadorAlliance() == Alliance.WHITE && valorActual >= maiorValorVisto) {
-                    maiorValorVisto = valorActual;
+                if (tabuleiro.getJogadorActual().getJogadorAlliance() == Alliance.WHITE && valorActual >= alpha) {
+                    alpha = valorActual;
                     melhorMovimento = movimento;
-                } else if (tabuleiro.getJogadorActual().getJogadorAlliance() == Alliance.BLACK && valorActual <= menorValorVisto) {
-                    menorValorVisto = valorActual;
+                } else if (tabuleiro.getJogadorActual().getJogadorAlliance() == Alliance.BLACK && valorActual <= beta) {
+                    beta = valorActual;
                     melhorMovimento = movimento;
                 }
             }
@@ -51,7 +50,7 @@ public class MiniMax implements EstrategiaMovimento {
         return tabuleiro.getJogadorActual().isEmCheckMate() || tabuleiro.getJogadorActual().isEmStaleMate();
     }
     
-    public int min(final Tabuleiro tabuleiro, final int profundidade) {
+    public int min(final Tabuleiro tabuleiro, final int profundidade, int alpha, int beta) {
         if (profundidade == 0 || isCenarioFimDoJogo(tabuleiro)) {
             return this.avaliadorTabuleiro.avaliar(tabuleiro, profundidade);
         }
@@ -61,17 +60,20 @@ public class MiniMax implements EstrategiaMovimento {
             final MoveTransition movimentoTransicao = tabuleiro.getJogadorActual().fazerMovimento(movimento);
             
             if (movimentoTransicao.getEstadoMovimento().isDone()) {
-                final int valorActual = max(movimentoTransicao.getTabuleiro(), profundidade - 1);
+                final int valorActual = max(movimentoTransicao.getTabuleiro(), profundidade - 1, alpha, beta);
                 
-                if (valorActual <= valorMenorVisto) {
-                    valorMenorVisto = valorActual;
+                valorMenorVisto = Math.min(valorMenorVisto, valorActual);
+                beta = Math.min(beta, valorMenorVisto);
+                
+                if (alpha >= beta) {
+                    break;
                 }
             }
         }
         return valorMenorVisto;
     }
     
-    public int max(final Tabuleiro tabuleiro, final int profundidade) {
+    public int max(final Tabuleiro tabuleiro, final int profundidade, int alpha, int beta) {
         if (profundidade == 0 || isCenarioFimDoJogo(tabuleiro)) {
             return this.avaliadorTabuleiro.avaliar(tabuleiro, profundidade);
         }
@@ -81,10 +83,13 @@ public class MiniMax implements EstrategiaMovimento {
             final MoveTransition movimentoTransicao = tabuleiro.getJogadorActual().fazerMovimento(movimento);
             
             if (movimentoTransicao.getEstadoMovimento().isDone()) {
-                final int valorActual = min(movimentoTransicao.getTabuleiro(), profundidade - 1);
+                final int valorActual = min(movimentoTransicao.getTabuleiro(), profundidade - 1, alpha, beta);
                 
-                if (valorActual >= valorMaiorVisto) {
-                    valorMaiorVisto = valorActual;
+                valorMaiorVisto = Math.max(valorActual, valorMaiorVisto);
+                alpha = Math.max(alpha, valorMaiorVisto);
+                
+                if (alpha >= beta) {
+                    break;
                 }
             }
         }
