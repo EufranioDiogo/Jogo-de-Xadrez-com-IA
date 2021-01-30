@@ -27,11 +27,11 @@ public final class AvaliadorTabuleiroPadrao implements AvaliadorTabuleiro {
     }
 
     private int scoreJogador(final Tabuleiro tabuleiro, final Jogador jogador, final int profundidade) {
-       return valorPeca(jogador) + mobilidade(jogador) + check(jogador) + checkMate(jogador, profundidade) + 
+       return somatorioDeTodasAsPecasDoJogador(jogador) + mobilidade(jogador) + check(jogador) + checkMate(jogador, profundidade) + 
                castled(jogador);
     }
     
-    private int valorPeca(final Jogador jogador) {
+    private int somatorioDeTodasAsPecasDoJogador(final Jogador jogador) {
         int valorTotalPecas = 0;
         
         for (final Peca peca : jogador.getPecasActivas()) {

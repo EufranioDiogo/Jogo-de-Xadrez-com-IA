@@ -4,16 +4,6 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/ed/NetBeansProjects/ChessGameAI/src/chessgameai/xadrez/gui/Mesa.java</file>
-            <file>file:/home/ed/NetBeansProjects/ChessGameAI/src/chessgameai/xadrez/engine/tabuleiro/TabuleiroUtils.java</file>
-            <file>file:/home/ed/NetBeansProjects/ChessGameAI/src/chessgameai/xadrez/engine/player/EstadoMovimento.java</file>
-            <file>file:/home/ed/NetBeansProjects/ChessGameAI/src/chessgameai/xadrez/engine/pecas/Bispo.java</file>
-            <file>file:/home/ed/NetBeansProjects/ChessGameAI/src/chessgameai/xadrez/engine/player/agente/MiniMax.java</file>
-            <file>file:/home/ed/NetBeansProjects/ChessGameAI/src/chessgameai/xadrez/engine/player/Jogador.java</file>
-            <file>file:/home/ed/NetBeansProjects/ChessGameAI/src/chessgameai/xadrez/engine/pecas/Pinhao.java</file>
-            <file>file:/home/ed/NetBeansProjects/ChessGameAI/src/chessgameai/xadrez/engine/player/JogadorPreto.java</file>
-            <file>file:/home/ed/NetBeansProjects/ChessGameAI/src/chessgameai/xadrez/engine/tabuleiro/Movimento.java</file>
-            <file>file:/home/ed/NetBeansProjects/ChessGameAI/src/chessgameai/xadrez/gui/GameSetup.java</file>
-            <file>file:/home/ed/NetBeansProjects/ChessGameAI/src/chessgameai/xadrez/engine/player/JogadorBranco.java</file>
         </group>
     </open-files>
 </project-private>

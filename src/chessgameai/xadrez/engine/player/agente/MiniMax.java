@@ -21,14 +21,10 @@ public class MiniMax implements EstrategiaMovimento {
     
     @Override
     public Movimento executar(Tabuleiro tabuleiro) {
-        //final long startTime = System.currentTimeMillis();
-        
         Movimento melhorMovimento = null;
         int maiorValorVisto = Integer.MIN_VALUE;
         int menorValorVisto = Integer.MAX_VALUE;
         int valorActual;
-        
-        //int numMoves = tabuleiro.getJogadorActual().getMovimentosLegais().size();
         
         for (final Movimento movimento: tabuleiro.getJogadorActual().getMovimentosLegais()) {
             final MoveTransition movimentoTransicao = tabuleiro.getJogadorActual().fazerMovimento(movimento);

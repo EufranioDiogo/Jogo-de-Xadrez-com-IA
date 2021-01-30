@@ -34,6 +34,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -56,7 +57,7 @@ public class Mesa extends Observable {
     private final Dimension DIMENSAO_PAINEL_QUADRADO = new Dimension(10, 10);
     private final PainelTabuleiro painelTabuleiro;
     private static Tabuleiro tabuleiro;
-    private final String pathPecaIcon = "/Users/eliananeto/Downloads/Jogo-de-Xadrez-com-IA-main/art/";
+    private final String pathPecaIcon = "/home/ed/NetBeansProjects/ChessGameAI/art/";
     private Quadrado origemQuadrado;
     private Quadrado destinoQuadrado;
     private Peca pecaMovidaPeloHumano;
