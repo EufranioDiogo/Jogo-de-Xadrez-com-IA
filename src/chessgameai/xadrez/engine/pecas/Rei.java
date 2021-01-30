@@ -29,24 +29,28 @@ public class Rei extends Peca {
     public ArrayList<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
         ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
         
-        for(final int possivelOffset : possiveisOffsetsDoRei) {
-            int coordenadaCandidata = this.posicaoPeca + possivelOffset;
-            
-            if (isExculasaoOitavaColuna(posicaoPeca, possivelOffset) ||
-                    isExculasaoPrimeiraColuna(posicaoPeca, possivelOffset)) {
-                continue;
-            }
-            
-            if (TabuleiroUtils.isCoordenadaValida(coordenadaCandidata)) {
-                final Quadrado quadradoCandidato = tabuleiro.getQuadrado(coordenadaCandidata);
-                
-                if (!quadradoCandidato.isQuadradoOcupado()) {
-                    movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, coordenadaCandidata));
-                } else {
-                    movimentosPossiveis.add(new Movimento.MajorAttackMove(tabuleiro, this, coordenadaCandidata));
+        
+        if (TabuleiroUtils.isCoordenadaValida(this.posicaoPeca)) {
+            for(final int possivelOffset : possiveisOffsetsDoRei) {
+                int coordenadaCandidata = this.posicaoPeca + possivelOffset;
+
+                if (isExculasaoOitavaColuna(posicaoPeca, possivelOffset) ||
+                        isExculasaoPrimeiraColuna(posicaoPeca, possivelOffset)) {
+                    continue;
+                }
+
+                if (TabuleiroUtils.isCoordenadaValida(coordenadaCandidata)) {
+                    final Quadrado quadradoCandidato = tabuleiro.getQuadrado(coordenadaCandidata);
+
+                    if (!quadradoCandidato.isQuadradoOcupado()) {
+                        movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, coordenadaCandidata));
+                    } else {
+                        movimentosPossiveis.add(new Movimento.MajorAttackMove(tabuleiro, this, coordenadaCandidata));
+                    }
                 }
             }
         }
+        
         
         return movimentosPossiveis;
     }

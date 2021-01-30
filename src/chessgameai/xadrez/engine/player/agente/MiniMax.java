@@ -30,6 +30,7 @@ public class MiniMax implements EstrategiaMovimento {
             final MoveTransition movimentoTransicao = tabuleiro.getJogadorActual().fazerMovimento(movimento);
             
             if (movimentoTransicao.getEstadoMovimento().isDone()) {
+                System.out.println(tabuleiro.getJogadorActual().getJogadorAlliance());
                 valorActual = tabuleiro.getJogadorActual().getJogadorAlliance() == Alliance.WHITE ? 
                         min(movimentoTransicao.getTabuleiro(), profundidade - 1) : 
                         max(movimentoTransicao.getTabuleiro(), profundidade - 1);
@@ -41,13 +42,8 @@ public class MiniMax implements EstrategiaMovimento {
                     menorValorVisto = valorActual;
                     melhorMovimento = movimento;
                 }
-                
             }
         }
-        
-        //final long tempoExecutado = System.currentTimeMillis() - startTime;
-        
-        //System.out.println("Tempo Executado: " + tempoExecutado);
         return melhorMovimento;
     }
 

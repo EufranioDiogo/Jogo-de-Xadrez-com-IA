@@ -29,29 +29,32 @@ public class Cavalo extends Peca{
         int coordenadaCandidataADestino;
         final ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
         
-        for(final int coordenada : POSSIVEIS_MOVIMENTO_VALIDOS) {
-            coordenadaCandidataADestino = this.posicaoPeca + coordenada;
-        
-            
-            if (TabuleiroUtils.isCoordenadaValida(coordenadaCandidataADestino)) {
-                final Quadrado quadroCandidato = tabuleiro.getQuadrado(coordenadaCandidataADestino);
-            
-                if (isExculasaoPrimeiraColuna(posicaoPeca, coordenadaCandidataADestino) ||
-                    isExculasaoSegundaColuna(posicaoPeca, coordenadaCandidataADestino) ||
-                    isExculasaoSetimaColuna(posicaoPeca, coordenadaCandidataADestino) ||
-                    isExculasaoOitavaColuna(posicaoPeca, coordenadaCandidataADestino)) {
-                    continue;
-                }
-               
-                if (!quadroCandidato.isQuadradoOcupado()) {
-                    movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this,coordenadaCandidataADestino));
-                } else {
-                    if (this.alliancePeca != quadroCandidato.getPeca().getAlliancePeca()) {
-                        movimentosPossiveis.add(new Movimento.MajorAttackMove(tabuleiro, this, coordenadaCandidataADestino));
+        if (TabuleiroUtils.isCoordenadaValida(this.posicaoPeca)) {
+            for(final int coordenada : POSSIVEIS_MOVIMENTO_VALIDOS) {
+                coordenadaCandidataADestino = this.posicaoPeca + coordenada;
+
+
+                if (TabuleiroUtils.isCoordenadaValida(coordenadaCandidataADestino)) {
+                    final Quadrado quadroCandidato = tabuleiro.getQuadrado(coordenadaCandidataADestino);
+
+                    if (isExculasaoPrimeiraColuna(posicaoPeca, coordenadaCandidataADestino) ||
+                        isExculasaoSegundaColuna(posicaoPeca, coordenadaCandidataADestino) ||
+                        isExculasaoSetimaColuna(posicaoPeca, coordenadaCandidataADestino) ||
+                        isExculasaoOitavaColuna(posicaoPeca, coordenadaCandidataADestino)) {
+                        continue;
+                    }
+
+                    if (!quadroCandidato.isQuadradoOcupado()) {
+                        movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this,coordenadaCandidataADestino));
+                    } else {
+                        if (this.alliancePeca != quadroCandidato.getPeca().getAlliancePeca()) {
+                            movimentosPossiveis.add(new Movimento.MajorAttackMove(tabuleiro, this, coordenadaCandidataADestino));
+                        }
                     }
                 }
             }
         }
+        
         return movimentosPossiveis;
     }
     

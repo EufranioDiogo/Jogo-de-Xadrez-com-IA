@@ -11,15 +11,11 @@ import chessgameai.xadrez.engine.pecas.Torre;
 import chessgameai.xadrez.engine.player.Jogador;
 import chessgameai.xadrez.engine.player.JogadorBranco;
 import chessgameai.xadrez.engine.player.JogadorPreto;
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import jdk.nashorn.internal.objects.annotations.Constructor;
 
 /**
  *

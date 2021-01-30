@@ -29,27 +29,31 @@ public class Torre extends Peca {
     @Override
     public ArrayList<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
         final ArrayList<Movimento> legalMoves = new ArrayList<>();
-        for (final int currentCandidateOffset : possiveisOffsetsDaTorre) {
-            int candidateDestinationCoordinate = this.posicaoPeca;
-            while (TabuleiroUtils.isCoordenadaValida(candidateDestinationCoordinate)) {
-                if (isColumnExclusion(currentCandidateOffset, candidateDestinationCoordinate)) {
-                    break;
-                }
-                candidateDestinationCoordinate += currentCandidateOffset;
-                if (TabuleiroUtils.isCoordenadaValida(candidateDestinationCoordinate)) {
-                    final Peca pieceAtDestination = tabuleiro.getQuadrado(candidateDestinationCoordinate).getPeca();
-                    if (pieceAtDestination == null) {
-                        legalMoves.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, candidateDestinationCoordinate));
-                    } else {
-                        final Alliance pieceAtDestinationAllegiance = pieceAtDestination.getAlliancePeca();
-                        if (this.getAlliancePeca() != pieceAtDestinationAllegiance) {
-                            legalMoves.add(new Movimento.MovimentoAtaque(tabuleiro, this, candidateDestinationCoordinate));
-                        }
+        
+        if (TabuleiroUtils.isCoordenadaValida(this.posicaoPeca)) {
+            for (final int currentCandidateOffset : possiveisOffsetsDaTorre) {
+                int candidateDestinationCoordinate = this.posicaoPeca;
+                while (TabuleiroUtils.isCoordenadaValida(candidateDestinationCoordinate)) {
+                    if (isColumnExclusion(currentCandidateOffset, candidateDestinationCoordinate)) {
                         break;
+                    }
+                    candidateDestinationCoordinate += currentCandidateOffset;
+                    if (TabuleiroUtils.isCoordenadaValida(candidateDestinationCoordinate)) {
+                        final Peca pieceAtDestination = tabuleiro.getQuadrado(candidateDestinationCoordinate).getPeca();
+                        if (pieceAtDestination == null) {
+                            legalMoves.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, candidateDestinationCoordinate));
+                        } else {
+                            final Alliance pieceAtDestinationAllegiance = pieceAtDestination.getAlliancePeca();
+                            if (this.getAlliancePeca() != pieceAtDestinationAllegiance) {
+                                legalMoves.add(new Movimento.MovimentoAtaque(tabuleiro, this, candidateDestinationCoordinate));
+                            }
+                            break;
+                        }
                     }
                 }
             }
         }
+        
         return legalMoves;
     }
 

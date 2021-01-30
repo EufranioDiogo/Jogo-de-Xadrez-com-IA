@@ -30,30 +30,34 @@ public class Bispo extends Peca {
     public ArrayList<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
         ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
         
-       for (final int currentCandidateOffset : possiveisOffsetsDoBispo) {
-            int candidateDestinationCoordinate = this.posicaoPeca;
+        
+       if (TabuleiroUtils.isCoordenadaValida(this.posicaoPeca)) {
+           for (final int currentCandidateOffset : possiveisOffsetsDoBispo) {
+                int candidateDestinationCoordinate = this.posicaoPeca;
             
-            while (TabuleiroUtils.isCoordenadaValida(candidateDestinationCoordinate)) {
-                if (isFirstColumnExclusion(currentCandidateOffset, candidateDestinationCoordinate) ||
-                    isEighthColumnExclusion(currentCandidateOffset, candidateDestinationCoordinate)) {
-                    break;
-                }
-                candidateDestinationCoordinate += currentCandidateOffset;
-                if (TabuleiroUtils.isCoordenadaValida(candidateDestinationCoordinate)) {
-                    final Peca pieceAtDestination = tabuleiro.getQuadrado(candidateDestinationCoordinate).getPeca();
-                    if (pieceAtDestination == null) {
-                        movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, candidateDestinationCoordinate));
-                    }
-                    else {
-                        final Alliance pieceAlliance = pieceAtDestination.getAlliancePeca();
-                        if (this.alliancePeca != pieceAlliance) {
-                            movimentosPossiveis.add(new Movimento.MajorAttackMove(tabuleiro, this, candidateDestinationCoordinate));
-                        }
+                while (TabuleiroUtils.isCoordenadaValida(candidateDestinationCoordinate)) {
+                    if (isFirstColumnExclusion(currentCandidateOffset, candidateDestinationCoordinate) ||
+                        isEighthColumnExclusion(currentCandidateOffset, candidateDestinationCoordinate)) {
                         break;
+                    }
+                    candidateDestinationCoordinate += currentCandidateOffset;
+                    if (TabuleiroUtils.isCoordenadaValida(candidateDestinationCoordinate)) {
+                        final Peca pieceAtDestination = tabuleiro.getQuadrado(candidateDestinationCoordinate).getPeca();
+                        if (pieceAtDestination == null) {
+                            movimentosPossiveis.add(new Movimento.MovimentoSemAtaque(tabuleiro, this, candidateDestinationCoordinate));
+                        }
+                        else {
+                            final Alliance pieceAlliance = pieceAtDestination.getAlliancePeca();
+                            if (this.alliancePeca != pieceAlliance) {
+                                movimentosPossiveis.add(new Movimento.MajorAttackMove(tabuleiro, this, candidateDestinationCoordinate));
+                            }
+                            break;
+                        }
                     }
                 }
             }
-        }
+       }
+       
         
         return movimentosPossiveis;
     }
