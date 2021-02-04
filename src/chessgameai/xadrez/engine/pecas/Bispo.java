@@ -2,13 +2,9 @@ package chessgameai.xadrez.engine.pecas;
 
 import chessgameai.Alliance;
 import chessgameai.xadrez.engine.tabuleiro.Movimento;
-import chessgameai.xadrez.engine.tabuleiro.Quadrado;
 import chessgameai.xadrez.engine.tabuleiro.Tabuleiro;
 import chessgameai.xadrez.engine.tabuleiro.TabuleiroUtils;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 /**
  *
@@ -28,11 +24,12 @@ public class Bispo extends Peca {
 
     @Override
     public ArrayList<Movimento> calcularPossiveisMovimentos(Tabuleiro tabuleiro) {
-        ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
+       ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
         
         
        if (TabuleiroUtils.isCoordenadaValida(this.posicaoPeca)) {
            for (final int currentCandidateOffset : possiveisOffsetsDoBispo) {
+               
                 int candidateDestinationCoordinate = this.posicaoPeca;
             
                 while (TabuleiroUtils.isCoordenadaValida(candidateDestinationCoordinate)) {
@@ -57,8 +54,6 @@ public class Bispo extends Peca {
                 }
             }
        }
-       
-        
         return movimentosPossiveis;
     }
 

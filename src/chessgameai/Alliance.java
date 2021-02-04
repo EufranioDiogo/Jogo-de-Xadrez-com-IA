@@ -24,7 +24,7 @@ public enum Alliance {
 
         @Override
         public boolean isQuadradoPromocaoPinhao(int posicao) {
-            return TabuleiroUtils.PRIMEIRA_LINHA[posicao];
+            return TabuleiroUtils.QUINTA_LINHA[posicao];
         }
     },
     BLACK {

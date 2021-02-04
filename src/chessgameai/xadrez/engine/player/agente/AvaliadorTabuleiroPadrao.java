@@ -9,11 +9,10 @@ import chessgameai.xadrez.engine.tabuleiro.Tabuleiro;
  * Free Use - Livre_Uso
  */
 public final class AvaliadorTabuleiroPadrao implements AvaliadorTabuleiro {
-
     private static final int CHECK_BONUS = 50;
-    private static final int CHECK_MATE_BONUS = 50;
+    private static final int CHECK_MATE_BONUS = 150;
     private static final int BONUS_PROFUNDIDADE = 100;
-     private static final int CASTLE_BONUS = 60;
+    private static final int CASTLE_BONUS = 60;
     
     public AvaliadorTabuleiroPadrao() {
         
@@ -21,9 +20,8 @@ public final class AvaliadorTabuleiroPadrao implements AvaliadorTabuleiro {
 
     @Override
     public int avaliar(Tabuleiro tabuleiro, int profundidade) {
-        return scoreJogador(tabuleiro, tabuleiro.getJogadorBranco(), profundidade) - 
-               scoreJogador(tabuleiro, tabuleiro.getJogadorPreto(), profundidade);
-        // Se scoreJogador > 0 bom movimento para Branco e scoreJogador < 0 bom movimento para Preto
+        return scoreJogador(tabuleiro, tabuleiro.getJogadorBranco(), profundidade) - scoreJogador(tabuleiro, tabuleiro.getJogadorPreto(), profundidade);
+        // Se scoreJogador > 0 bom movimento para Branco e scoreJogador < 0 bom movimento para Preto(Agente)
     }
 
     private int scoreJogador(final Tabuleiro tabuleiro, final Jogador jogador, final int profundidade) {

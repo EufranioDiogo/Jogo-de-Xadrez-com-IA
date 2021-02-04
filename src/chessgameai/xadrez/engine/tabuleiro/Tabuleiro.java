@@ -100,23 +100,20 @@ public class Tabuleiro {
         Construtor construtor = new Construtor();
         Alliance allianceActual = Alliance.BLACK;
         boolean setandoPecasPretas = true;
-        int primeiraLinha = 0;
-        int segundaLinha = 1;
+        int primeiraLinha = 3;
+        int segundaLinha = 4;
         
         for (int i = 0; i < 2; i++) {
             construtor.setPeca(new Torre(primeiraLinha * TabuleiroUtils.NUM_QUADRADOS_POR_LINHA + 0, allianceActual));
-            construtor.setPeca(new Torre(primeiraLinha * TabuleiroUtils.NUM_QUADRADOS_POR_LINHA + 7, allianceActual));
 
             construtor.setPeca(new Cavalo(primeiraLinha * TabuleiroUtils.NUM_QUADRADOS_POR_LINHA + 1, allianceActual));
-            construtor.setPeca(new Cavalo(primeiraLinha * TabuleiroUtils.NUM_QUADRADOS_POR_LINHA + 6, allianceActual));
 
             construtor.setPeca(new Bispo(primeiraLinha * TabuleiroUtils.NUM_QUADRADOS_POR_LINHA + 2, allianceActual));
-            construtor.setPeca(new Bispo(primeiraLinha * TabuleiroUtils.NUM_QUADRADOS_POR_LINHA + 5, allianceActual));
 
             construtor.setPeca(new Rainha(primeiraLinha * TabuleiroUtils.NUM_QUADRADOS_POR_LINHA + 3, allianceActual));
             construtor.setPeca(new Rei(primeiraLinha * TabuleiroUtils.NUM_QUADRADOS_POR_LINHA + 4, allianceActual));
             
-            for (int j = 0; j < TabuleiroUtils.NUM_QUADRADOS_POR_LINHA; j++) {
+            for (int j = 0; j < 5; j++) {
                 construtor.setPeca(new Pinhao(segundaLinha * TabuleiroUtils.NUM_QUADRADOS_POR_LINHA + j, allianceActual));
             }
             
@@ -127,6 +124,7 @@ public class Tabuleiro {
             primeiraLinha = 7;
             segundaLinha = 6;
         }
+        
         construtor.setProximoJogadorAJogar(allianceActual);
         
         return construtor.build();

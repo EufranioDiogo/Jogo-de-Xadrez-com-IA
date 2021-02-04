@@ -20,6 +20,8 @@ public class TabuleiroUtils {
     
     public static final boolean[] OITAVA_LINHA = iniciarLinha(0);
     public static final boolean[] PRIMEIRA_LINHA = iniciarLinha(0);
+    public static final boolean[] SEGUNDA_LINHA_PRETO = iniciarLinha(1);
+    public static final boolean[] TERCEIRA_LINHA_PRETO = iniciarLinha(2);
     public static final boolean[] SEGUNDA_LINHA = iniciarLinha(6);
     
     public static final boolean[] QUINTA_LINHA = iniciarLinha(3);
@@ -59,7 +61,9 @@ public class TabuleiroUtils {
     }
     
     public static boolean isCoordenadaValida(final int coordenada) {
-        return (coordenada > -1 && coordenada < NUM_QUADRADOS) && !OITAVA_COLUNA[coordenada] && !SETIMA_COLUNA[coordenada] && !SEXTA_COLUNA[coordenada];
+        return (coordenada > -1 && coordenada < NUM_QUADRADOS) && 
+               !OITAVA_COLUNA[coordenada] && !SETIMA_COLUNA[coordenada] && !SEXTA_COLUNA[coordenada] &&
+               !PRIMEIRA_LINHA[coordenada] && !SEGUNDA_LINHA_PRETO[coordenada] && !TERCEIRA_LINHA_PRETO[coordenada];
     }
     
     public static int getCoordenadaDaPosicao(final String posicao) {

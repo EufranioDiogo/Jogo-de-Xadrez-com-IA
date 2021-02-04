@@ -3,8 +3,6 @@ import chessgameai.Alliance;
 import chessgameai.xadrez.engine.tabuleiro.Movimento;
 import chessgameai.xadrez.engine.tabuleiro.Tabuleiro;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 /**
  *
  * @Autor ed
@@ -37,8 +35,6 @@ public abstract class Peca {
         return posicaoPeca == outraPeca.getPosicaoPeca() && tipoPeca == outraPeca.getTipoPeca() && 
                alliancePeca == outraPeca.getAlliancePeca() && isPrimeiroMovimento == outraPeca.isPrimeiroMovimento();
     }
-    
-    
     
     public int computeHashCode() {
         int result = tipoPeca.hashCode();
@@ -105,28 +101,28 @@ public abstract class Peca {
                 return 300;
             }
         },
-        TORRE("T") {
-            @Override
-            public int getValor() {
-                return 500;
-            }
-        },
         CAVALO("C") {
             @Override
             public int getValor() {
                 return 300;
             }
         },
-        REI("R") {
+        TORRE("T") {
             @Override
             public int getValor() {
-                return 10000;
+                return 500;
             }
         },
         RAINHA("Q") {
             @Override
             public int getValor() {
                 return 900;
+            }
+        },
+        REI("R") {
+            @Override
+            public int getValor() {
+                return 10000;
             }
         };
         private String nomePeca;
@@ -142,8 +138,4 @@ public abstract class Peca {
         
         public abstract int getValor();
     }
-    
-    
-    
-    
 }

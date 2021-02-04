@@ -155,7 +155,33 @@ public class Mesa extends Observable {
 
             final PensamentoAI pensamentoAI = new PensamentoAI();
 
-            final EstrategiaMovimento minimax = new MiniMax(3);
+            
+            
+            /*
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            ***************************************************************
+            */
+            
+            
+            final EstrategiaMovimento minimax = new MiniMax(6);
             
             Movimento melhorMovimento = minimax.executar(Mesa.getTabuleiro());
             
@@ -508,8 +534,9 @@ public class Mesa extends Observable {
             });
             setPreferredSize(DIMENSAO_PAINEL_QUADRADO);
             if (TabuleiroUtils.OITAVA_COLUNA[idQuadrado] || TabuleiroUtils.SETIMA_COLUNA[idQuadrado] || 
-                TabuleiroUtils.SEXTA_COLUNA[idQuadrado]) {
-                setBackground(new Color(0, 0, 0));
+                TabuleiroUtils.SEXTA_COLUNA[idQuadrado] || TabuleiroUtils.PRIMEIRA_LINHA[idQuadrado] ||
+                TabuleiroUtils.SEGUNDA_LINHA_PRETO[idQuadrado] || TabuleiroUtils.TERCEIRA_LINHA_PRETO[idQuadrado]) {
+                setBackground(new Color(255, 255, 255));
             } else {
                 setBackground(cor);    
             }
@@ -519,16 +546,24 @@ public class Mesa extends Observable {
         private void colocarIconsPeca(final Tabuleiro tabuleiro) throws IOException {
             this.removeAll();
             
-            if (tabuleiro.getQuadrado(this.idQuadrado).isQuadradoOcupado()) {
-                final String nomeDaPeca = tabuleiro.getQuadrado(this.idQuadrado).getPeca().getAlliancePeca().toString() + 
-                      tabuleiro.getQuadrado(this.idQuadrado).getPeca().toString().toUpperCase() + ".gif"; 
-                final File novaImagem = new File(pathPecaIcon + nomeDaPeca);
-                
-                final BufferedImage image = ImageIO.read(novaImagem);
-                final JLabel label = new JLabel(new ImageIcon(image));
-                
-                add(label);
+            if (TabuleiroUtils.OITAVA_COLUNA[idQuadrado] || TabuleiroUtils.SETIMA_COLUNA[idQuadrado] || 
+                TabuleiroUtils.SEXTA_COLUNA[idQuadrado] || TabuleiroUtils.PRIMEIRA_LINHA[idQuadrado] ||
+                TabuleiroUtils.SEGUNDA_LINHA_PRETO[idQuadrado] || TabuleiroUtils.TERCEIRA_LINHA_PRETO[idQuadrado]) {
+                setBackground(new Color(255, 255, 255));
+            } else {
+                if (tabuleiro.getQuadrado(this.idQuadrado).isQuadradoOcupado()) {
+                    final String nomeDaPeca = tabuleiro.getQuadrado(this.idQuadrado).getPeca().getAlliancePeca().toString() + 
+                          tabuleiro.getQuadrado(this.idQuadrado).getPeca().toString().toUpperCase() + ".gif"; 
+                    final File novaImagem = new File(pathPecaIcon + nomeDaPeca);
+
+                    final BufferedImage image = ImageIO.read(novaImagem);
+                    final JLabel label = new JLabel(new ImageIcon(image));
+
+                    add(label);
+                }
             }
+            
+            
         }
 
         public void drawQuadrado(Tabuleiro tabuleiro) throws IOException {

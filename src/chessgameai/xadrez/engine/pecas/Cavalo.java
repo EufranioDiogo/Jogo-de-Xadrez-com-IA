@@ -14,7 +14,7 @@ import java.util.List;
  * Free Use - Livre_Uso
  */
 public class Cavalo extends Peca{
-    private final int[] POSSIVEIS_MOVIMENTO_VALIDOS = {-17, -15, -10, -6, 6, 10, 15, 17};
+    private final int[] possiveisOffsets = {-17, -15, -10, -6, 6, 10, 15, 17};
 
     public Cavalo(final int posicaoPeca, final Alliance alliancePeca) {
         super(posicaoPeca, alliancePeca, TipoPeca.CAVALO, true);
@@ -30,8 +30,8 @@ public class Cavalo extends Peca{
         final ArrayList<Movimento> movimentosPossiveis = new ArrayList<>();
         
         if (TabuleiroUtils.isCoordenadaValida(this.posicaoPeca)) {
-            for(final int coordenada : POSSIVEIS_MOVIMENTO_VALIDOS) {
-                coordenadaCandidataADestino = this.posicaoPeca + coordenada;
+            for(final int offset : possiveisOffsets) {
+                coordenadaCandidataADestino = this.posicaoPeca + offset;
 
 
                 if (TabuleiroUtils.isCoordenadaValida(coordenadaCandidataADestino)) {

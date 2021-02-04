@@ -4,6 +4,9 @@ import chessgameai.xadrez.engine.pecas.Peca;
 import chessgameai.xadrez.engine.pecas.Pinhao;
 import chessgameai.xadrez.engine.pecas.Torre;
 import chessgameai.xadrez.engine.tabuleiro.Tabuleiro.Construtor;
+import static chessgameai.xadrez.engine.tabuleiro.TabuleiroUtils.PRIMEIRA_LINHA;
+import static chessgameai.xadrez.engine.tabuleiro.TabuleiroUtils.SEGUNDA_LINHA_PRETO;
+import static chessgameai.xadrez.engine.tabuleiro.TabuleiroUtils.TERCEIRA_LINHA_PRETO;
 
 /**
  *
@@ -239,8 +242,9 @@ public abstract class Movimento {
             }
             
             for (final Peca peca : this.tabuleiro.getJogadorActual().getOponente().getPecasActivas()) {
-                if (!peca.equals(this.pecaASerAtacada))
-                constructor.setPeca(peca);
+                if (!peca.equals(this.pecaASerAtacada)) {
+                    constructor.setPeca(peca);   
+                }
             }
             
             constructor.setPeca(this.pecaASerMovimentada.movimentarPeca(this));
@@ -309,7 +313,7 @@ public abstract class Movimento {
         
         @Override
         public String toString() {
-            return "Coordenada destino: " + this.coordenadaDestino;
+            return this.pecaASerMovimentada.getTipoPeca().toString() + TabuleiroUtils.getPosicaoParaCoordenada(coordenadaDestino);
         }
     }
     
@@ -371,6 +375,7 @@ public abstract class Movimento {
             return true;
         }
         
+        @Override
         public Tabuleiro executarMovimento() {
             final Construtor constructor = new Construtor();
 
@@ -457,7 +462,7 @@ public abstract class Movimento {
         
         @Override
         public Tabuleiro executarMovimento() {
-            throw new RuntimeException("Não é possível executar o movimento");
+            throw new RuntimeException("Não é possível executar o movimento, porque o movimento é nulo");
         }
     }
     
@@ -470,8 +475,9 @@ public abstract class Movimento {
         public static Movimento criarMovimento(final Tabuleiro tabuleiro, final int posicaoActual, final int posicaoDestino) {
             for(final Movimento movimento : tabuleiro.getMovimentosValidos()) {
                 if (TabuleiroUtils.OITAVA_COLUNA[posicaoActual] || TabuleiroUtils.SEXTA_COLUNA[posicaoActual] || TabuleiroUtils.SETIMA_COLUNA[posicaoActual]
-                        ||   TabuleiroUtils.OITAVA_COLUNA[posicaoDestino] || TabuleiroUtils.SEXTA_COLUNA[posicaoDestino] || TabuleiroUtils.SETIMA_COLUNA[posicaoDestino]
-                           )
+                    || TabuleiroUtils.OITAVA_COLUNA[posicaoDestino] || TabuleiroUtils.SEXTA_COLUNA[posicaoDestino] || TabuleiroUtils.SETIMA_COLUNA[posicaoDestino]
+                    || PRIMEIRA_LINHA[posicaoActual] || SEGUNDA_LINHA_PRETO[posicaoActual] || TERCEIRA_LINHA_PRETO[posicaoActual]
+                    || PRIMEIRA_LINHA[posicaoDestino] || SEGUNDA_LINHA_PRETO[posicaoDestino] || TERCEIRA_LINHA_PRETO[posicaoDestino])
                 {
                     return null;
                    
