@@ -114,6 +114,7 @@ public abstract class Jogador {
     public abstract Collection<Peca> getPecasActivas();
     public abstract Alliance getJogadorAlliance();
     public abstract Jogador getOponente();
+    
     protected abstract Collection<Movimento> calcularReiCastles(Collection<Movimento> movimentosJogador,
             Collection<Movimento> movimentosInimigos);
 

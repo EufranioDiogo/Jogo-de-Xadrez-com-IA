@@ -123,7 +123,7 @@ public abstract class Movimento {
         
         @Override
         public String toString() {
-            return TabuleiroUtils.getPosicaoParaCoordenada(this.pecaASerMovimentada.getPosicaoPeca()).substring(0, 1) + "x"
+            return TabuleiroUtils.getPosicaoParaCoordenada(this.pecaASerMovimentada.getPosicaoPeca()) + "x"
                     + TabuleiroUtils.getPosicaoParaCoordenada(this.coordenadaDestino);
         }
        
@@ -165,7 +165,7 @@ public abstract class Movimento {
         
         @Override
         public String toString() {
-            return TabuleiroUtils.getPosicaoParaCoordenada(this.pecaASerMovimentada.getPosicaoPeca()).substring(0, 1) + "x"
+            return TabuleiroUtils.getPosicaoParaCoordenada(this.pecaASerMovimentada.getPosicaoPeca()) + "x"
                     + TabuleiroUtils.getPosicaoParaCoordenada(this.coordenadaDestino);
         }
     }
@@ -216,7 +216,7 @@ public abstract class Movimento {
         
         @Override
         public String toString() {
-            return TabuleiroUtils.getPosicaoParaCoordenada(this.pecaASerMovimentada.getPosicaoPeca()).substring(0, 1) + "x"
+            return TabuleiroUtils.getPosicaoParaCoordenada(this.pecaASerMovimentada.getPosicaoPeca()) + "x"
                     + TabuleiroUtils.getPosicaoParaCoordenada(this.coordenadaDestino);
         }
     }
@@ -255,7 +255,7 @@ public abstract class Movimento {
         
         @Override
         public String toString() {
-            return TabuleiroUtils.getPosicaoParaCoordenada(this.pecaASerMovimentada.getPosicaoPeca()).substring(0, 1) + "x"
+            return TabuleiroUtils.getPosicaoParaCoordenada(this.pecaASerMovimentada.getPosicaoPeca()) + "x"
                     + TabuleiroUtils.getPosicaoParaCoordenada(this.coordenadaDestino);
         }
     }
@@ -396,7 +396,7 @@ public abstract class Movimento {
 
             return constructor.build();
         }
-        
+        //exe5
         @Override
         public int hashCode() {
             final int prime = 31;
@@ -481,6 +481,8 @@ public abstract class Movimento {
                 {
                     return null;
                    
+                } else if (movimento.getPosicaoActual() == movimento.getCoordenadaDestino()) {
+                    return null;
                 }
                 else if (movimento.getPosicaoActual() == posicaoActual && movimento.getCoordenadaDestino() == posicaoDestino) {
                      return movimento;

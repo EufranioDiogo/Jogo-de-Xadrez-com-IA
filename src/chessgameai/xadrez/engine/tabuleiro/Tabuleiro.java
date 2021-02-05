@@ -58,7 +58,9 @@ public class Tabuleiro {
             final ArrayList<Movimento> possibleMoviments = peca.calcularPossiveisMovimentos(this);
             
             for (Movimento movimento : possibleMoviments) {
-                movimentos.add(movimento);
+                if (movimento.coordenadaDestino != movimento.getPosicaoActual()) {
+                    movimentos.add(movimento);
+                }
             }
         }
         return movimentos;

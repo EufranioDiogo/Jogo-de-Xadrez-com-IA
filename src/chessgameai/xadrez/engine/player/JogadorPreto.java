@@ -48,6 +48,7 @@ public class JogadorPreto extends Jogador{
         final List<Movimento> reiCastles = new ArrayList<>();
         
         if (this.rei.isPrimeiroMovimento() && !this.isEmCheck()) {
+            /*
             if (!this.tabuleiro.getQuadrado(5).isQuadradoOcupado() &&
                 !this.tabuleiro.getQuadrado(6).isQuadradoOcupado()) {
                 Quadrado quadradoTorre = this.tabuleiro.getQuadrado(7);
@@ -60,20 +61,20 @@ public class JogadorPreto extends Jogador{
                                 quadradoTorre.getPeca().getPosicaoPeca(), 5));
                     }
                 }
-            }
+            }*/
             
-            if(!this.tabuleiro.getQuadrado(1).isQuadradoOcupado() &&
-               !this.tabuleiro.getQuadrado(2).isQuadradoOcupado() &&
-               !this.tabuleiro.getQuadrado(3).isQuadradoOcupado()) {
-                Quadrado quadradoTorre = this.tabuleiro.getQuadrado(TabuleiroUtils.NUM_QUADRADOS - 8);
+            if(!this.tabuleiro.getQuadrado(25).isQuadradoOcupado() &&
+               !this.tabuleiro.getQuadrado(26).isQuadradoOcupado() &&
+               !this.tabuleiro.getQuadrado(27).isQuadradoOcupado()) {
+                Quadrado quadradoTorre = this.tabuleiro.getQuadrado(24);
                 
                 if (quadradoTorre.isQuadradoOcupado() && quadradoTorre.getPeca().isPrimeiroMovimento()) {
-                    if (Jogador.calcularAtaquesNaCasa(2, this.getOponente().getMovimentosLegais()).isEmpty() &&
-                        Jogador.calcularAtaquesNaCasa(3, this.getOponente().getMovimentosLegais()).isEmpty() &&
-                        Jogador.calcularAtaquesNaCasa(4, this.getOponente().getMovimentosLegais()).isEmpty() &&
+                    if (Jogador.calcularAtaquesNaCasa(25, this.getOponente().getMovimentosLegais()).isEmpty() &&
+                        Jogador.calcularAtaquesNaCasa(26, this.getOponente().getMovimentosLegais()).isEmpty() &&
+                        Jogador.calcularAtaquesNaCasa(27, this.getOponente().getMovimentosLegais()).isEmpty() &&
                             quadradoTorre.getPeca().isTorre()) {
-                        reiCastles.add(new Movimento.RainhaSideCastleMove(this.tabuleiro, this.rei, 2, (Torre) quadradoTorre.getPeca(),
-                                quadradoTorre.getPeca().getPosicaoPeca(), 3));
+                        reiCastles.add(new Movimento.RainhaSideCastleMove(this.tabuleiro, this.rei, 25, (Torre) quadradoTorre.getPeca(),
+                                quadradoTorre.getPeca().getPosicaoPeca(), 27));
                     }
                 }
             }

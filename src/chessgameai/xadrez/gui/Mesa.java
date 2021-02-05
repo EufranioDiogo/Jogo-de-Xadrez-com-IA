@@ -1,5 +1,6 @@
 package chessgameai.xadrez.gui;
 
+import chessgameai.Alliance;
 import chessgameai.xadrez.engine.pecas.Peca;
 import chessgameai.xadrez.engine.tabuleiro.Movimento;
 import chessgameai.xadrez.engine.tabuleiro.Quadrado;
@@ -20,6 +21,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -181,7 +183,7 @@ public class Mesa extends Observable {
             */
             
             
-            final EstrategiaMovimento minimax = new MiniMax(6);
+            final EstrategiaMovimento minimax = new MiniMax(2);
             
             Movimento melhorMovimento = minimax.executar(Mesa.getTabuleiro());
             
@@ -324,9 +326,58 @@ public class Mesa extends Observable {
         final JMenuItem exitGame = new JMenuItem("Sair");
         
         exitGame.addActionListener((ActionEvent e) -> {
+            buildFiles();
             System.exit(0);
         });
         return exitGame;
+    }
+    
+    private void buildFiles() {
+        try {
+            File ficheiroPlayer1 = new File("player1.txt");
+            if (!ficheiroPlayer1.isFile()) {
+                ficheiroPlayer1.createNewFile();
+            }
+            FileWriter caneta = new FileWriter(ficheiroPlayer1);
+
+            caneta.write("Start Game\n");
+            caneta.write("White\n");
+            
+            for (Movimento movimento : this.logMovimento.movimentos) {
+                final String coordenadaOrigem = TabuleiroUtils.getPosicaoParaCoordenada(movimento.getPosicaoActual());
+                final String coordenadaDestino = TabuleiroUtils.getPosicaoParaCoordenada(movimento.getCoordenadaDestino());
+                
+                if (movimento.getPecaMovimentada().getAlliancePeca() == Alliance.WHITE) {
+                    caneta.write(coordenadaOrigem + coordenadaDestino + "\n");   
+                } else {
+                   caneta.write("Black played " + coordenadaOrigem + coordenadaDestino + "\n"); 
+                }
+            }
+            caneta.close();
+            
+            File ficheiroPlayer2 = new File("player2.txt");
+            if (!ficheiroPlayer1.isFile()) {
+                ficheiroPlayer1.createNewFile();
+            }
+            caneta = new FileWriter(ficheiroPlayer2);
+
+            caneta.write("Start Game\n");
+            caneta.write("Black\n");
+            
+            for (Movimento movimento : this.logMovimento.movimentos) {
+                final String coordenadaOrigem = TabuleiroUtils.getPosicaoParaCoordenada(movimento.getPosicaoActual());
+                final String coordenadaDestino = TabuleiroUtils.getPosicaoParaCoordenada(movimento.getCoordenadaDestino());
+                
+                if (movimento.getPecaMovimentada().getAlliancePeca() == Alliance.WHITE) {
+                    caneta.write("White played " + coordenadaOrigem + coordenadaDestino + "\n");   
+                } else {
+                   caneta.write(coordenadaOrigem + coordenadaDestino + "\n"); 
+                }
+            }
+            caneta.close();
+            
+        } catch (Exception e) {
+        }
     }
 
     private JMenuBar construirMenuBar() {
