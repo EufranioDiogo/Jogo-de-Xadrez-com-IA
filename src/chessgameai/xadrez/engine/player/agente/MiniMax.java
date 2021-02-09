@@ -35,24 +35,29 @@ public class MiniMax implements EstrategiaMovimento {
         int beta = Integer.MAX_VALUE;
         int valorActual;
         
-        System.out.println("Jogador: " + tabuleiro.getJogadorActual().toString() + " Movimentos Possiveis: " + tabuleiro.getJogadorActual().getMovimentosLegais().size());
+        System.out.println("Jogador: " + tabuleiro.getJogadorActual().toString() + " Movimentos Possiveis: " + tabuleiro.getJogadorActual().getMovimentosLegais().size() + "\n");
         
         for (final Movimento movimento : tabuleiro.getJogadorActual().getMovimentosLegais()) {
-            System.out.println("*********************************************************");
-            System.out.println("Origem: " + movimento.getPecaMovimentada() + 
+            System.out.println("############################## INICIO RAMIFICAÇÃO ##############################");
+            System.out.println("\nOrigem: " + movimento.getPecaMovimentada() + 
                     TabuleiroUtils.getPosicaoParaCoordenada(movimento.getPecaMovimentada().getPosicaoPeca())
                     + "\nDestino: " + TabuleiroUtils.getPosicaoParaCoordenada(movimento.getCoordenadaDestino())
             );
             
             
+            
             final MoveTransition movimentoTransicao = tabuleiro.getJogadorActual().fazerMovimento(movimento);
 
+            System.out.println(movimentoTransicao.getTabuleiro());
+            System.out.println("*********************************************************");
             if (movimentoTransicao.getEstadoMovimento().isDone()) {
-                valorActual = tabuleiro.getJogadorActual().getJogadorAlliance() == Alliance.BLACK ? 
+                valorActual = tabuleiro.getJogadorActual().getJogadorAlliance() == Alliance.WHITE ? 
                         min(movimentoTransicao.getTabuleiro(), profundidade - 1, alpha, beta, 0) : 
                         max(movimentoTransicao.getTabuleiro(), profundidade - 1, alpha, beta, 0);
 
+                
                 System.out.println("Custo da decisão para o preto: " + valorActual);
+                System.out.println("--------------------------------------------------");
                 if (tabuleiro.getJogadorActual().getJogadorAlliance() == Alliance.WHITE && valorActual >= alpha) {
                     alpha = valorActual;
                     melhorMovimento = movimento;
@@ -61,6 +66,7 @@ public class MiniMax implements EstrategiaMovimento {
                     melhorMovimento = movimento;
                 }
             }
+            System.out.println("############################## FINAL RAMIFICAÇÃO ##############################");
         }
         return melhorMovimento;
     }
@@ -77,15 +83,18 @@ public class MiniMax implements EstrategiaMovimento {
         }
         int valorMenorVisto = Integer.MAX_VALUE;
         
-        System.out.println("Jogador: " + tabuleiro.getJogadorActual().toString() + " Movimentos Possiveis: " + tabuleiro.getJogadorActual().getMovimentosLegais().size());
+        System.out.println("Jogador: " + tabuleiro.getJogadorActual().toString() + " Movimentos Possiveis: " + tabuleiro.getJogadorActual().getMovimentosLegais().size() + "\n");
         
         for (final Movimento movimento : tabuleiro.getJogadorActual().getMovimentosLegais()) {
-            System.out.println("MIN*********************************************************");
+            System.out.println("************************** MIN *******************************");
             System.out.println("Origem: " + movimento.getPecaMovimentada() + 
                     TabuleiroUtils.getPosicaoParaCoordenada(movimento.getPecaMovimentada().getPosicaoPeca())
                     + "\nDestino: " + TabuleiroUtils.getPosicaoParaCoordenada(movimento.getCoordenadaDestino())
             );
+           
             final MoveTransition movimentoTransicao = tabuleiro.getJogadorActual().fazerMovimento(movimento);
+            
+            System.out.println(movimentoTransicao.getTabuleiro());
             
             if (movimentoTransicao.getEstadoMovimento().isDone()) {
                 final int valorActual = max(movimentoTransicao.getTabuleiro(), profundidade - 1, alpha, beta, quantNos + 1);
@@ -108,15 +117,17 @@ public class MiniMax implements EstrategiaMovimento {
         }
         int valorMaiorVisto = Integer.MIN_VALUE;
         
-        System.out.println("Jogador: " + tabuleiro.getJogadorActual().toString() + " Movimentos Possiveis: " + tabuleiro.getJogadorActual().getMovimentosLegais().size());
+        System.out.println("Jogador: " + tabuleiro.getJogadorActual().toString() + " Movimentos Possiveis: " + tabuleiro.getJogadorActual().getMovimentosLegais().size() + "\n");
         
         for (final Movimento movimento : tabuleiro.getJogadorActual().getMovimentosLegais()) {
-            System.out.println("MAX*********************************************************");
+            System.out.println("************************** MAX *******************************");
             System.out.println("Origem: " + movimento.getPecaMovimentada() + 
                     TabuleiroUtils.getPosicaoParaCoordenada(movimento.getPecaMovimentada().getPosicaoPeca())
                     + "\nDestino: " + TabuleiroUtils.getPosicaoParaCoordenada(movimento.getCoordenadaDestino())
             );
             final MoveTransition movimentoTransicao = tabuleiro.getJogadorActual().fazerMovimento(movimento);
+            
+            System.out.println(movimentoTransicao.getTabuleiro());
             
             if (movimentoTransicao.getEstadoMovimento().isDone()) {
                 final int valorActual = min(movimentoTransicao.getTabuleiro(), profundidade - 1, alpha, beta, quantNos + 1);

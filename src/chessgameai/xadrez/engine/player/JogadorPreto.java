@@ -40,7 +40,7 @@ public class JogadorPreto extends Jogador{
     
     @Override
     public String toString() {
-        return "JogadorPreto{" + '}';
+        return "JogadorPreto ";
     }
 
     @Override

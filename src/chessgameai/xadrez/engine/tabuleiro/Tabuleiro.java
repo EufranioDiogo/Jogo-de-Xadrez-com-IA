@@ -161,7 +161,12 @@ public class Tabuleiro {
         final StringBuilder builder = new StringBuilder();
         for(int i = 0; i < TabuleiroUtils.NUM_QUADRADOS; i++) {
             final String textoQuadrado = this.tabuleiroJogo.get(i).toString();
-            builder.append(String.format("%s", textoQuadrado));
+            
+            if (!TabuleiroUtils.isCoordenadaValida(i)) {
+                builder.append(String.format("%s", " "));
+            } else {
+                builder.append(String.format("%s", textoQuadrado));
+            }
             
             if ((i + 1) % TabuleiroUtils.NUM_QUADRADOS_POR_LINHA == 0) {
                 builder.append("\n");
