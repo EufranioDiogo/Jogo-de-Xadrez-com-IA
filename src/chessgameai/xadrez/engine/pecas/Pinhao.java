@@ -49,7 +49,14 @@ public class Pinhao extends Peca {
                         (TabuleiroUtils.QUINTA_LINHA[coordenadaCandidata] && this.getAlliancePeca() == BLACK)) &&
                         !tabuleiro.getQuadrado(coordenadaCandidata).isQuadradoOcupado()) {
 
-                        movimentosPossiveis.add(new Movimento.PinhaoSalto(tabuleiro, this, coordenadaCandidata));
+                        if (TabuleiroUtils.isCoordenadaValida(coordenadaCandidata - (8 * this.alliancePeca.getDirection()))) {
+                            
+                            Peca possivelPeca = tabuleiro.getQuadrado(coordenadaCandidata - (8 * this.alliancePeca.getDirection())).getPeca();
+                            
+                            if (possivelPeca == null) {
+                                movimentosPossiveis.add(new Movimento.PinhaoSalto(tabuleiro, this, coordenadaCandidata));
+                            }
+                        }
                 } else if (possivelOffset == 7 &&
                         !((TabuleiroUtils.OITAVA_COLUNA[this.posicaoPeca] && this.alliancePeca == WHITE ||
                         (TabuleiroUtils.PRIMEIRA_COLUNA[this.posicaoPeca] && this.alliancePeca == BLACK)))) {

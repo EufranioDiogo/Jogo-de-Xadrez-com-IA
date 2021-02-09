@@ -5,6 +5,7 @@ import chessgameai.xadrez.engine.pecas.Peca;
 import chessgameai.xadrez.engine.pecas.Rei;
 import chessgameai.xadrez.engine.tabuleiro.Movimento;
 import chessgameai.xadrez.engine.tabuleiro.Tabuleiro;
+import chessgameai.xadrez.engine.tabuleiro.TabuleiroUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -125,5 +126,23 @@ public abstract class Jogador {
         movimentos.addAll(castleMoves);
         
         return movimentos;
+    }
+    
+    public String mostrarMovimentos() {
+        String result = "";
+        
+        if (this.movimentosValidos != null) {
+           for (Movimento movimento :  this.movimentosValidos) {
+                result += "Origem: " + movimento.getPecaMovimentada().getTipoPeca()
+                        + TabuleiroUtils.getPosicaoParaCoordenada(movimento.getPecaMovimentada().getPosicaoPeca())
+                        + ", Destino: "
+                        + TabuleiroUtils.getPosicaoParaCoordenada(movimento.getCoordenadaDestino())
+                        + "\n";
+            } 
+           result += "Quant Movimentos: " + this.movimentosValidos.size() + "\n";
+        }
+        
+        
+        return result;
     }
 }

@@ -375,8 +375,8 @@ public class Mesa extends Observable {
                 }
             }
             caneta.close();
-            
-        } catch (Exception e) {
+            System.out.println("");
+        } catch (IOException e) {
         }
     }
 
@@ -519,7 +519,6 @@ public class Mesa extends Observable {
                                     origemQuadrado = null;
                                 }
                             } else {
-
                                 if (origemQuadrado.getPeca().getPosicaoPeca() == idQuadrado) {
                                     origemQuadrado = null;
                                     destinoQuadrado = null;
@@ -533,7 +532,6 @@ public class Mesa extends Observable {
                                     if (movimentacao.getEstadoMovimento().isDone()) {
                                         tabuleiro = movimentacao.getTabuleiro();
                                         logMovimento.adicionarMovimento(movimento);
-                                        //Move Log
                                     }
 
                                     SwingUtilities.invokeLater(new Runnable() {
@@ -591,6 +589,7 @@ public class Mesa extends Observable {
             } else {
                 setBackground(cor);    
             }
+            
             validate();
         }
         
@@ -601,6 +600,9 @@ public class Mesa extends Observable {
                 TabuleiroUtils.SEXTA_COLUNA[idQuadrado] || TabuleiroUtils.PRIMEIRA_LINHA[idQuadrado] ||
                 TabuleiroUtils.SEGUNDA_LINHA_PRETO[idQuadrado] || TabuleiroUtils.TERCEIRA_LINHA_PRETO[idQuadrado]) {
                 setBackground(new Color(255, 255, 255));
+                if (idQuadrado == 24) {
+                    add(new JLabel("a"));
+                }
             } else {
                 if (tabuleiro.getQuadrado(this.idQuadrado).isQuadradoOcupado()) {
                     final String nomeDaPeca = tabuleiro.getQuadrado(this.idQuadrado).getPeca().getAlliancePeca().toString() + 
